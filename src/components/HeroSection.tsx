@@ -15,13 +15,21 @@ const HeroSection = () => {
     <section
       id="hero"
       className="section-tesla bg-background"
-      style={{
-        backgroundImage: `url(${thermalHeroBg})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
     >
-      {/* Light Gradient Overlay for text contrast */}
+      {/* Animated thermal background */}
+      <div 
+        className="absolute inset-0 thermal-animated"
+        style={{
+          backgroundImage: `url(${thermalHeroBg})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      />
+      
+      {/* Thermal glow overlay */}
+      <div className="absolute inset-0 thermal-glow-overlay" />
+      
+      {/* Gradient Overlay for text contrast */}
       <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background/60" />
       <div className="absolute inset-0 bg-gradient-to-r from-background/30 via-transparent to-background/30" />
 
