@@ -8,14 +8,28 @@ const HeroSection = () => {
   useEffect(() => {
     const video = videoRef.current;
     if (video) {
-      // When video ends, pause on last frame
       const handleEnded = () => {
+        // Seek to last frame and pause
+        if (video.duration) {
+          video.currentTime = video.duration;
+        }
         video.pause();
-        // Seek to very end to ensure last frame is shown
-        video.currentTime = video.duration - 0.001;
       };
+      
+      // Prevent video from resetting
+      const handleSeeked = () => {
+        if (video.ended || video.currentTime >= video.duration - 0.1) {
+          video.pause();
+        }
+      };
+      
       video.addEventListener('ended', handleEnded);
-      return () => video.removeEventListener('ended', handleEnded);
+      video.addEventListener('seeked', handleSeeked);
+      
+      return () => {
+        video.removeEventListener('ended', handleEnded);
+        video.removeEventListener('seeked', handleSeeked);
+      };
     }
   }, []);
 
@@ -32,7 +46,7 @@ const HeroSection = () => {
       id="hero"
       className="section-tesla bg-background"
     >
-      {/* Video Background - Full Screen Cover */}
+      {/* Video Background - Full Screen Cover with Zoom */}
       <motion.div 
         className="absolute inset-0 overflow-hidden"
         initial={{ opacity: 0 }}
@@ -44,8 +58,7 @@ const HeroSection = () => {
           autoPlay
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ objectPosition: 'center center' }}
+          className="absolute inset-0 w-full h-full object-cover scale-[2]"
         >
           <source src="/videos/thermal-hero.mp4" type="video/mp4" />
         </video>
@@ -64,10 +77,7 @@ const HeroSection = () => {
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
         <motion.h1 
-          className="text-5xl md:text-7xl lg:text-8xl font-display font-semibold text-white mb-4 tracking-wide italic"
-          style={{ 
-            textShadow: '0 4px 30px rgba(0,0,0,0.9), 0 2px 10px rgba(0,0,0,0.8)',
-          }}
+          className="text-5xl md:text-7xl font-medium text-white mb-4 drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)]"
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
