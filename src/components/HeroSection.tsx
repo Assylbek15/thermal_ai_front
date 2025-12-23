@@ -1,38 +1,7 @@
 import { ChevronDown, Upload, Building2 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useRef, useEffect } from 'react';
 
 const HeroSection = () => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (video) {
-      const handleEnded = () => {
-        // Seek to last frame and pause
-        if (video.duration) {
-          video.currentTime = video.duration;
-        }
-        video.pause();
-      };
-      
-      // Prevent video from resetting
-      const handleSeeked = () => {
-        if (video.ended || video.currentTime >= video.duration - 0.1) {
-          video.pause();
-        }
-      };
-      
-      video.addEventListener('ended', handleEnded);
-      video.addEventListener('seeked', handleSeeked);
-      
-      return () => {
-        video.removeEventListener('ended', handleEnded);
-        video.removeEventListener('seeked', handleSeeked);
-      };
-    }
-  }, []);
-
   const scrollToAnalyzer = (mode: 'upload' | 'dashboard') => {
     const element = document.getElementById('analyzer');
     if (element) {
@@ -46,7 +15,7 @@ const HeroSection = () => {
       id="hero"
       className="section-tesla bg-background"
     >
-      {/* Video Background - Full Screen Cover with Zoom */}
+      {/* Video Background */}
       <motion.div 
         className="absolute inset-0 overflow-hidden"
         initial={{ opacity: 0 }}
@@ -54,25 +23,25 @@ const HeroSection = () => {
         transition={{ duration: 1.5, ease: [0.25, 0.46, 0.45, 0.94] }}
       >
         <video
-          ref={videoRef}
           autoPlay
+          loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover scale-[2]"
+          className="absolute inset-0 w-full h-full object-cover scale-105"
         >
           <source src="/videos/thermal-hero.mp4" type="video/mp4" />
         </video>
       </motion.div>
       
       {/* Dark overlay for contrast */}
-      <div className="absolute inset-0 bg-black/40" />
+      <div className="absolute inset-0 bg-black/50" />
       
       {/* Thermal glow overlay */}
-      <div className="absolute inset-0 thermal-glow-overlay opacity-30" />
+      <div className="absolute inset-0 thermal-glow-overlay opacity-50" />
       
       {/* Gradient Overlay for text contrast */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/60" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/70" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30" />
 
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
