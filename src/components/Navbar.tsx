@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, Globe } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const navItems = [
   { label: 'Thermal Imaging', href: '#hero' },
@@ -23,103 +24,161 @@ const Navbar = () => {
 
   return (
     <>
-      <nav
+      <motion.nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
             ? 'bg-background/95 backdrop-blur-md'
             : 'bg-transparent'
         }`}
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
       >
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
           <div className="flex items-center justify-between h-14">
             {/* Logo */}
-            <a href="#" className="flex items-center gap-1">
+            <motion.a 
+              href="#" 
+              className="flex items-center gap-1"
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+            >
               <span className="text-xl font-bold text-foreground">CECECO</span>
               <span className="text-xl font-bold text-muted-foreground mx-1">×</span>
               <span className="text-xl font-bold text-primary">Thermal AI</span>
-            </a>
+            </motion.a>
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center gap-8">
-              {navItems.map((item) => (
-                <a
+              {navItems.map((item, i) => (
+                <motion.a
                   key={item.label}
                   href={item.href}
-                  className="text-sm font-medium text-foreground/90 hover:text-foreground transition-colors"
+                  className="text-sm font-medium text-foreground/90 hover:text-foreground transition-colors relative"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.1 + i * 0.1, ease: "easeOut" }}
+                  whileHover={{ y: -2 }}
                 >
                   {item.label}
-                </a>
+                </motion.a>
               ))}
             </div>
 
             {/* Right side actions */}
             <div className="hidden lg:flex items-center gap-6">
-              <a
+              <motion.a
                 href="#"
                 className="text-sm font-medium text-foreground/90 hover:text-foreground transition-colors"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+                whileHover={{ y: -2 }}
               >
                 Book Demo
-              </a>
-              <a
+              </motion.a>
+              <motion.a
                 href="#"
                 className="text-sm font-medium text-foreground/90 hover:text-foreground transition-colors"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6 }}
+                whileHover={{ y: -2 }}
               >
                 Login
-              </a>
-              <button className="text-foreground/90 hover:text-foreground transition-colors">
+              </motion.a>
+              <motion.button 
+                className="text-foreground/90 hover:text-foreground transition-colors"
+                whileHover={{ rotate: 20 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              >
                 <Globe className="w-5 h-5" />
-              </button>
+              </motion.button>
             </div>
 
             {/* Mobile menu button */}
-            <button
+            <motion.button
               className="lg:hidden p-2 text-foreground"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle menu"
+              whileTap={{ scale: 0.9 }}
             >
-              {isMobileMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
-            </button>
+              <AnimatePresence mode="wait">
+                {isMobileMenuOpen ? (
+                  <motion.div
+                    key="close"
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <X className="w-6 h-6" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="menu"
+                    initial={{ rotate: 90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: -90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Menu className="w-6 h-6" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.button>
           </div>
         </div>
-      </nav>
+      </motion.nav>
 
       {/* Mobile Menu */}
-      <div
-        className={`fixed inset-0 z-40 bg-background transition-transform duration-300 lg:hidden ${
-          isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
-      >
-        <div className="pt-20 px-6">
-          <div className="flex flex-col gap-4">
-            {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="text-lg font-medium text-foreground py-3 border-b border-border"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {item.label}
-              </a>
-            ))}
-            <a
-              href="#"
-              className="text-lg font-medium text-foreground py-3 border-b border-border"
-            >
-              Book Demo
-            </a>
-            <a
-              href="#"
-              className="text-lg font-medium text-foreground py-3 border-b border-border"
-            >
-              Login
-            </a>
-          </div>
-        </div>
-      </div>
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            className="fixed inset-0 z-40 bg-background lg:hidden"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+          >
+            <div className="pt-20 px-6">
+              <div className="flex flex-col gap-4">
+                {navItems.map((item, i) => (
+                  <motion.a
+                    key={item.label}
+                    href={item.href}
+                    className="text-lg font-medium text-foreground py-3 border-b border-border"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.1, duration: 0.4, ease: "easeOut" }}
+                  >
+                    {item.label}
+                  </motion.a>
+                ))}
+                <motion.a
+                  href="#"
+                  className="text-lg font-medium text-foreground py-3 border-b border-border"
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: navItems.length * 0.1, duration: 0.4, ease: "easeOut" }}
+                >
+                  Book Demo
+                </motion.a>
+                <motion.a
+                  href="#"
+                  className="text-lg font-medium text-foreground py-3 border-b border-border"
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: (navItems.length + 1) * 0.1, duration: 0.4, ease: "easeOut" }}
+                >
+                  Login
+                </motion.a>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };
