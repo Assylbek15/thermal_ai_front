@@ -100,7 +100,7 @@ const RetrofitSimulator = () => {
                 </div>
                 <div className="p-3 border border-foreground/10">
                   <p className="text-[10px] font-mono text-muted-foreground tracking-wider">COST SAVINGS</p>
-                  <p className="text-2xl font-light font-mono text-foreground">£{totalCost}</p>
+                  <p className="text-2xl font-light font-mono text-foreground">${totalCost}</p>
                   <p className="text-[10px] font-mono text-muted-foreground">/year</p>
                 </div>
                 <div className="p-3 border border-foreground/10">
