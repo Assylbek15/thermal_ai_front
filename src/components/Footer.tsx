@@ -1,28 +1,25 @@
 import { Globe } from 'lucide-react';
 
 const footerLinks = {
-  products: [
-    'Model S',
-    'Model 3',
-    'Model X',
-    'Model Y',
-    'Cybertruck',
-    'Solar Panels',
-    'Solar Roof',
-    'Powerwall',
+  solutions: [
+    'Thermal Imaging',
+    'AI Drone Analysis',
+    'Building Assessment',
+    'Energy Audits',
+    'Moisture Detection',
+    'HVAC Optimization',
   ],
   support: [
-    'Charging',
-    'Energy Support',
-    'Vehicle Support',
-    'Trade-In',
-    'Find Us',
+    'Documentation',
+    'API Reference',
+    'Case Studies',
+    'Training',
     'Contact Us',
   ],
   company: [
     'About',
     'Careers',
-    'Investor Relations',
+    'Partners',
     'Blog',
     'Press',
   ],
@@ -33,13 +30,13 @@ const Footer = () => {
     <footer className="bg-background border-t border-border py-16">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
         <div className="grid md:grid-cols-4 gap-12 mb-12">
-          {/* Products */}
+          {/* Solutions */}
           <div>
             <h3 className="text-sm font-medium text-foreground uppercase tracking-wider mb-4">
-              Products
+              Solutions
             </h3>
             <ul className="space-y-3">
-              {footerLinks.products.map((link) => (
+              {footerLinks.solutions.map((link) => (
                 <li key={link}>
                   <a
                     href="#"
@@ -97,7 +94,7 @@ const Footer = () => {
             </h3>
             <button className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
               <Globe className="w-4 h-4" />
-              United States
+              United Kingdom
             </button>
           </div>
         </div>
@@ -106,17 +103,17 @@ const Footer = () => {
         <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex flex-wrap gap-6 text-sm text-muted-foreground">
             <a href="#" className="hover:text-foreground transition-colors">
-              Privacy & Legal
+              Privacy Policy
             </a>
             <a href="#" className="hover:text-foreground transition-colors">
-              Locations
+              Terms of Service
             </a>
             <a href="#" className="hover:text-foreground transition-colors">
-              News
+              Cookie Policy
             </a>
           </div>
           <p className="text-sm text-muted-foreground">
-            © 2024 Tesla Clone. For demonstration purposes only.
+            © 2024 InspektAI. All rights reserved.
           </p>
         </div>
       </div>

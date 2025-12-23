@@ -6,7 +6,7 @@ const HeroSection = () => {
       id="hero"
       className="section-tesla bg-background"
       style={{
-        backgroundImage: `url('https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=2072&auto=format&fit=crop')`,
+        backgroundImage: `url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
@@ -17,22 +17,22 @@ const HeroSection = () => {
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
         <h1 className="text-5xl md:text-7xl font-medium text-foreground mb-4 animate-fade-in-up text-shadow">
-          Solar Panels
+          Thermal Imaging
         </h1>
         <p className="text-lg md:text-xl text-foreground/90 mb-2 animate-fade-in-up delay-100 text-shadow">
-          Lowest Cost Solar Panels in America
+          Uncover the Unseen with Advanced Building Analysis
         </p>
         <p className="text-sm md:text-base text-foreground/70 mb-8 animate-fade-in-up delay-200 text-shadow">
-          Money-back guarantee
+          Pinpoint heat loss, thermal anomalies, and moisture intrusion
         </p>
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-300">
           <a
-            href="#calculator"
+            href="#analyzer"
             className="btn-tesla-primary min-w-[200px]"
           >
-            Order Now
+            Upload Image
           </a>
           <a
             href="#features"
