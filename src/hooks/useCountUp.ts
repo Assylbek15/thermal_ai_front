@@ -7,7 +7,7 @@ interface UseCountUpOptions {
   startOnMount?: boolean;
 }
 
-export const useCountUp = ({ end, duration = 2000, delay = 0, startOnMount = true }: UseCountUpOptions) => {
+export const useCountUp = ({ end, duration = 3500, delay = 0, startOnMount = true }: UseCountUpOptions) => {
   const [count, setCount] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const countRef = useRef(0);
