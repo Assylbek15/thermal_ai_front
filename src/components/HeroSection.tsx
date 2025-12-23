@@ -1,7 +1,24 @@
 import { ChevronDown, Upload, Building2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useRef, useEffect } from 'react';
 
 const HeroSection = () => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      // When video ends, pause on last frame
+      const handleEnded = () => {
+        video.pause();
+        // Seek to very end to ensure last frame is shown
+        video.currentTime = video.duration - 0.001;
+      };
+      video.addEventListener('ended', handleEnded);
+      return () => video.removeEventListener('ended', handleEnded);
+    }
+  }, []);
+
   const scrollToAnalyzer = (mode: 'upload' | 'dashboard') => {
     const element = document.getElementById('analyzer');
     if (element) {
@@ -15,7 +32,7 @@ const HeroSection = () => {
       id="hero"
       className="section-tesla bg-background"
     >
-      {/* Video Background */}
+      {/* Video Background - Full Screen Cover */}
       <motion.div 
         className="absolute inset-0 overflow-hidden"
         initial={{ opacity: 0 }}
@@ -23,30 +40,34 @@ const HeroSection = () => {
         transition={{ duration: 1.5, ease: [0.25, 0.46, 0.45, 0.94] }}
       >
         <video
+          ref={videoRef}
           autoPlay
-          loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover scale-105"
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ objectPosition: 'center center' }}
         >
           <source src="/videos/thermal-hero.mp4" type="video/mp4" />
         </video>
       </motion.div>
       
       {/* Dark overlay for contrast */}
-      <div className="absolute inset-0 bg-black/50" />
+      <div className="absolute inset-0 bg-black/40" />
       
       {/* Thermal glow overlay */}
-      <div className="absolute inset-0 thermal-glow-overlay opacity-50" />
+      <div className="absolute inset-0 thermal-glow-overlay opacity-30" />
       
       {/* Gradient Overlay for text contrast */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/70" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/60" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20" />
 
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
         <motion.h1 
-          className="text-5xl md:text-7xl font-medium text-white mb-4 drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)]"
+          className="text-5xl md:text-7xl lg:text-8xl font-display font-semibold text-white mb-4 tracking-wide italic"
+          style={{ 
+            textShadow: '0 4px 30px rgba(0,0,0,0.9), 0 2px 10px rgba(0,0,0,0.8)',
+          }}
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
