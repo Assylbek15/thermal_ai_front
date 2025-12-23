@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Upload, AlertTriangle, Thermometer, Droplets, Zap, X, Plus, Building2 } from 'lucide-react';
 import CityDashboard from './CityDashboard';
 
@@ -85,6 +85,22 @@ const ThermalAnalyzer = () => {
   const [showResults, setShowResults] = useState(false);
   const [selectedResult, setSelectedResult] = useState<AnalysisResult | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Listen for mode changes from hero section
+  useEffect(() => {
+    const handleModeChange = (event: CustomEvent<'upload' | 'dashboard'>) => {
+      if (event.detail === 'upload') {
+        setMode('upload');
+      } else if (event.detail === 'dashboard') {
+        setMode('city-dashboard');
+      }
+    };
+
+    window.addEventListener('setAnalyzerMode', handleModeChange as EventListener);
+    return () => {
+      window.removeEventListener('setAnalyzerMode', handleModeChange as EventListener);
+    };
+  }, []);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];

@@ -87,15 +87,19 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Language/Region */}
+          {/* Regions */}
           <div>
             <h3 className="text-sm font-medium text-foreground uppercase tracking-wider mb-4">
-              Region
+              Regions
             </h3>
-            <button className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-              <Globe className="w-4 h-4" />
-              United Kingdom
-            </button>
+            <ul className="space-y-2">
+              {['Azerbaijan', 'Türkiye', 'Pakistan', 'Kazakhstan', 'Uzbekistan', 'Kyrgyzstan'].map((country) => (
+                <li key={country} className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Globe className="w-3 h-3" />
+                  {country}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
@@ -113,7 +117,7 @@ const Footer = () => {
             </a>
           </div>
           <p className="text-sm text-muted-foreground">
-            © 2024 InspektAI. All rights reserved.
+            © 2025 InspektAI. All rights reserved.
           </p>
         </div>
       </div>
