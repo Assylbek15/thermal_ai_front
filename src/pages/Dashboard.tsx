@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Building2, Thermometer, Droplets, TrendingUp, TrendingDown, MapPin, Search, Zap, BarChart3, Activity, AlertTriangle } from 'lucide-react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
+import { ArrowLeft, Building2, Thermometer, TrendingUp, TrendingDown, MapPin, Search, Zap, Activity, AlertTriangle } from 'lucide-react';
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import thermalBuilding1 from '@/assets/thermal-building-1.jpg';
 import thermalBuilding2 from '@/assets/thermal-building-2.jpg';
 import thermalBuilding3 from '@/assets/thermal-building-3.jpg';
@@ -92,13 +92,13 @@ const energyData = [
   { month: 'Jun', output: 450, forecast: 420 },
 ];
 
-const ratingDistribution = [
-  { name: 'A', value: 15, color: '#22c55e' },
-  { name: 'B', value: 25, color: '#4ade80' },
-  { name: 'C', value: 30, color: '#facc15' },
-  { name: 'D', value: 18, color: '#fb923c' },
-  { name: 'E', value: 8, color: '#f97316' },
-  { name: 'F', value: 4, color: '#ef4444' },
+const efficiencyData = [
+  { name: 'A', value: 15 },
+  { name: 'B', value: 25 },
+  { name: 'C', value: 30 },
+  { name: 'D', value: 18 },
+  { name: 'E', value: 8 },
+  { name: 'F', value: 4 },
 ];
 
 const Dashboard = () => {
@@ -121,18 +121,6 @@ const Dashboard = () => {
       b.district.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const getEpcColor = (rating: string) => {
-    const colors: Record<string, string> = {
-      A: 'bg-green-500',
-      B: 'bg-green-400',
-      C: 'bg-yellow-400',
-      D: 'bg-orange-400',
-      E: 'bg-orange-500',
-      F: 'bg-red-500',
-    };
-    return colors[rating] || 'bg-muted';
-  };
-
   const currentCity = cities.find((c) => c.id === selectedCity);
 
   // City selection screen
@@ -142,53 +130,43 @@ const Dashboard = () => {
         <div className="max-w-7xl mx-auto px-6 py-12">
           <button
             onClick={() => navigate('/')}
-            className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8 transition-colors"
+            className="flex items-center gap-2 text-muted-foreground hover:text-primary mb-12 transition-colors font-mono text-sm tracking-wider"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to Home
+            BACK TO HOME
           </button>
 
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm mb-6">
-              <Building2 className="w-4 h-4" />
+          <div className="mb-16">
+            <p className="text-primary font-mono text-sm tracking-[0.3em] uppercase mb-4">
               Government Access Portal
-            </div>
-            <h1 className="text-4xl md:text-5xl font-medium text-foreground mb-4">
+            </p>
+            <h1 className="text-5xl md:text-6xl font-light text-foreground tracking-tight mb-4">
               City Dashboard
             </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <div className="w-24 h-px bg-primary mb-6" />
+            <p className="text-muted-foreground max-w-xl">
               Select a city to access thermal analysis data for buildings across the region
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-foreground/10">
             {cities.map((city) => (
               <button
                 key={city.id}
                 onClick={() => handleCitySelect(city.id)}
-                className="group relative bg-card hover:bg-card/80 rounded-lg p-8 text-left transition-all duration-500 border border-border hover:border-primary/50 overflow-hidden"
+                className="group bg-background p-8 text-left transition-all duration-300 hover:bg-secondary"
               >
-                {/* Glow effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                
-                <div className="relative z-10">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 text-primary group-hover:from-primary group-hover:to-primary/80 group-hover:text-primary-foreground transition-all duration-300">
-                      <Building2 className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-medium text-foreground">{city.name}</h3>
-                      <p className="text-sm text-muted-foreground">{city.country}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm text-muted-foreground">
-                      {Math.floor(Math.random() * 500) + 200} buildings analyzed
-                    </p>
-                    <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all">
-                      <ArrowLeft className="w-4 h-4 rotate-180" />
-                    </div>
-                  </div>
+                <div className="flex items-center justify-between mb-6">
+                  <Building2 className="w-5 h-5 text-primary" />
+                  <span className="text-xs font-mono text-muted-foreground tracking-wider">
+                    {Math.floor(Math.random() * 500) + 200} BUILDINGS
+                  </span>
+                </div>
+                <h3 className="text-2xl font-light text-foreground mb-1">{city.name}</h3>
+                <p className="text-sm text-muted-foreground font-mono tracking-wider">{city.country.toUpperCase()}</p>
+                <div className="mt-6 flex items-center gap-2 text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+                  <span className="text-xs font-mono tracking-wider">ACCESS</span>
+                  <ArrowLeft className="w-3 h-3 rotate-180" />
                 </div>
               </button>
             ))}
@@ -202,125 +180,115 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Top Navigation */}
-      <header className="border-b border-border bg-card/50 backdrop-blur-xl sticky top-0 z-50">
+      <header className="border-b border-foreground/10 sticky top-0 z-50 bg-background">
         <div className="flex items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-8">
             <button
               onClick={() => setSelectedCity(null)}
-              className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+              className="text-muted-foreground hover:text-primary transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
-            <div>
-              <h1 className="text-xl font-medium text-foreground">{currentCity?.name}</h1>
-              <p className="text-sm text-muted-foreground">{filteredBuildings.length} buildings • Last updated: Today</p>
+            <div className="flex items-center gap-4">
+              <h1 className="text-xl font-light text-foreground tracking-wide">{currentCity?.name}</h1>
+              <span className="text-xs font-mono text-muted-foreground tracking-wider border-l border-foreground/20 pl-4">
+                {filteredBuildings.length} BUILDINGS
+              </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <input
-                type="text"
-                placeholder="Search buildings..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2 bg-secondary/50 border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 w-72"
-              />
-            </div>
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 pr-4 py-2 bg-transparent border border-foreground/20 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary w-64 font-mono"
+            />
           </div>
         </div>
       </header>
 
       <div className="p-6">
         {/* Stats Overview */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <div className="bg-gradient-to-br from-card to-card/50 rounded-xl p-5 border border-border">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-sm text-muted-foreground">Total Buildings</span>
-              <div className="p-2 rounded-lg bg-primary/10">
-                <Building2 className="w-4 h-4 text-primary" />
-              </div>
+        <div className="grid grid-cols-4 border-b border-foreground/10 mb-6">
+          <div className="p-6 border-r border-foreground/10">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-xs font-mono text-muted-foreground tracking-wider">TOTAL BUILDINGS</span>
+              <Building2 className="w-4 h-4 text-primary" />
             </div>
-            <p className="text-3xl font-semibold text-foreground">{filteredBuildings.length}</p>
-            <p className="text-xs text-green-400 flex items-center gap-1 mt-1">
-              <TrendingUp className="w-3 h-3" /> +12% from last month
+            <p className="text-4xl font-light text-foreground font-mono">{filteredBuildings.length}</p>
+            <p className="text-xs text-analytics-green flex items-center gap-1 mt-2 font-mono">
+              <TrendingUp className="w-3 h-3" /> +12%
             </p>
           </div>
 
-          <div className="bg-gradient-to-br from-card to-card/50 rounded-xl p-5 border border-border">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-sm text-muted-foreground">Avg. Efficiency</span>
-              <div className="p-2 rounded-lg bg-green-500/10">
-                <Zap className="w-4 h-4 text-green-400" />
-              </div>
+          <div className="p-6 border-r border-foreground/10">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-xs font-mono text-muted-foreground tracking-wider">AVG EFFICIENCY</span>
+              <Zap className="w-4 h-4 text-analytics-green" />
             </div>
-            <p className="text-3xl font-semibold text-foreground">74<span className="text-lg text-muted-foreground">%</span></p>
-            <p className="text-xs text-green-400 flex items-center gap-1 mt-1">
-              <TrendingUp className="w-3 h-3" /> +5% improvement
+            <p className="text-4xl font-light text-foreground font-mono">74<span className="text-lg text-muted-foreground">%</span></p>
+            <p className="text-xs text-analytics-green flex items-center gap-1 mt-2 font-mono">
+              <TrendingUp className="w-3 h-3" /> +5%
             </p>
           </div>
 
-          <div className="bg-gradient-to-br from-card to-card/50 rounded-xl p-5 border border-border">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-sm text-muted-foreground">Heat Loss Alerts</span>
-              <div className="p-2 rounded-lg bg-destructive/10">
-                <AlertTriangle className="w-4 h-4 text-destructive" />
-              </div>
+          <div className="p-6 border-r border-foreground/10">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-xs font-mono text-muted-foreground tracking-wider">HEAT LOSS ALERTS</span>
+              <AlertTriangle className="w-4 h-4 text-analytics-pink" />
             </div>
-            <p className="text-3xl font-semibold text-foreground">23</p>
-            <p className="text-xs text-destructive flex items-center gap-1 mt-1">
-              <TrendingDown className="w-3 h-3" /> 8 critical issues
+            <p className="text-4xl font-light text-foreground font-mono">23</p>
+            <p className="text-xs text-analytics-pink flex items-center gap-1 mt-2 font-mono">
+              8 CRITICAL
             </p>
           </div>
 
-          <div className="bg-gradient-to-br from-card to-card/50 rounded-xl p-5 border border-border">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-sm text-muted-foreground">Energy Saved</span>
-              <div className="p-2 rounded-lg bg-cyan-500/10">
-                <Activity className="w-4 h-4 text-cyan-400" />
-              </div>
+          <div className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-xs font-mono text-muted-foreground tracking-wider">ENERGY SAVED</span>
+              <Activity className="w-4 h-4 text-primary" />
             </div>
-            <p className="text-3xl font-semibold text-foreground">1.2<span className="text-lg text-muted-foreground">MW</span></p>
-            <p className="text-xs text-green-400 flex items-center gap-1 mt-1">
-              <TrendingUp className="w-3 h-3" /> This quarter
+            <p className="text-4xl font-light text-foreground font-mono">1.2<span className="text-lg text-muted-foreground">MW</span></p>
+            <p className="text-xs text-analytics-green flex items-center gap-1 mt-2 font-mono">
+              THIS QUARTER
             </p>
           </div>
         </div>
 
         <div className="grid lg:grid-cols-12 gap-6">
           {/* Buildings List */}
-          <div className="lg:col-span-3 bg-card rounded-xl border border-border overflow-hidden">
-            <div className="p-4 border-b border-border">
-              <h3 className="font-medium text-foreground">Buildings</h3>
+          <div className="lg:col-span-3 border border-foreground/10">
+            <div className="p-4 border-b border-foreground/10">
+              <h3 className="font-mono text-xs tracking-wider text-muted-foreground">BUILDINGS</h3>
             </div>
             <div className="max-h-[600px] overflow-y-auto">
               {filteredBuildings.map((building) => (
                 <button
                   key={building.id}
                   onClick={() => setSelectedBuilding(building)}
-                  className={`w-full flex gap-3 p-3 border-b border-border/50 transition-all text-left ${
+                  className={`w-full flex gap-3 p-4 border-b border-foreground/5 transition-all text-left ${
                     selectedBuilding?.id === building.id
                       ? 'bg-primary/10 border-l-2 border-l-primary'
-                      : 'hover:bg-secondary/50'
+                      : 'hover:bg-secondary'
                   }`}
                 >
                   <img
                     src={building.image}
                     alt={building.address}
-                    className="w-14 h-14 object-cover rounded-lg"
+                    className="w-12 h-12 object-cover"
                   />
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-foreground truncate">{building.address}</p>
-                    <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
+                    <p className="text-sm font-light text-foreground truncate">{building.address}</p>
+                    <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1 font-mono">
                       <MapPin className="w-3 h-3" />
                       {building.district}
                     </p>
-                    <div className="flex items-center gap-2 mt-2">
-                      <span className={`px-1.5 py-0.5 text-xs font-bold rounded ${getEpcColor(building.epcRating)} text-white`}>
-                        {building.epcRating}
-                      </span>
-                      <span className="text-xs text-muted-foreground">{building.efficiency}% eff.</span>
+                    <div className="flex items-center gap-3 mt-2">
+                      <span className="text-xs font-mono text-primary">{building.epcRating}</span>
+                      <span className="text-xs font-mono text-muted-foreground">{building.efficiency}%</span>
                     </div>
                   </div>
                 </button>
@@ -332,15 +300,15 @@ const Dashboard = () => {
           <div className="lg:col-span-6 space-y-6">
             {/* Thermal Image */}
             {selectedBuilding && (
-              <div className="bg-card rounded-xl border border-border overflow-hidden">
-                <div className="p-4 border-b border-border flex items-center justify-between">
+              <div className="border border-foreground/10">
+                <div className="p-4 border-b border-foreground/10 flex items-center justify-between">
                   <div>
-                    <h3 className="font-medium text-foreground">{selectedBuilding.address}</h3>
-                    <p className="text-sm text-muted-foreground">{selectedBuilding.district}</p>
+                    <h3 className="font-light text-foreground">{selectedBuilding.address}</h3>
+                    <p className="text-xs font-mono text-muted-foreground tracking-wider">{selectedBuilding.district.toUpperCase()}</p>
                   </div>
-                  <div className="flex gap-2">
-                    <span className="px-3 py-1.5 bg-primary/10 text-primary text-xs font-medium rounded-full">Thermal</span>
-                    <span className="px-3 py-1.5 bg-secondary text-muted-foreground text-xs font-medium rounded-full">RGB</span>
+                  <div className="flex gap-4 text-xs font-mono tracking-wider">
+                    <span className="text-primary">THERMAL</span>
+                    <span className="text-muted-foreground">RGB</span>
                   </div>
                 </div>
                 <div className="relative">
@@ -349,101 +317,100 @@ const Dashboard = () => {
                     alt={selectedBuilding.address}
                     className="w-full h-80 object-cover"
                   />
-                  {/* Hotspot markers with animation */}
-                  <div
-                    className="absolute w-10 h-10 rounded-full bg-yellow-500/80 flex items-center justify-center cursor-pointer hover:scale-110 transition-transform animate-pulse"
-                    style={{ top: '30%', left: '40%' }}
-                  >
-                    <span className="text-sm font-bold text-black">+</span>
-                  </div>
-                  <div
-                    className="absolute w-10 h-10 rounded-full bg-orange-500/80 flex items-center justify-center cursor-pointer hover:scale-110 transition-transform animate-pulse"
-                    style={{ top: '50%', left: '65%' }}
-                  >
-                    <span className="text-sm font-bold text-black">+</span>
-                  </div>
-                  <div
-                    className="absolute w-10 h-10 rounded-full bg-red-500/80 flex items-center justify-center cursor-pointer hover:scale-110 transition-transform animate-pulse"
-                    style={{ top: '25%', left: '70%' }}
-                  >
-                    <span className="text-sm font-bold text-black">+</span>
-                  </div>
                   
                   {/* Info overlays */}
-                  <div className="absolute bottom-4 left-4 bg-background/90 backdrop-blur-md rounded-lg px-4 py-3 border border-border/50">
-                    <p className="text-xs text-muted-foreground">Energy Use</p>
-                    <p className="text-xl font-semibold text-foreground">{selectedBuilding.spaceHeating} <span className="text-sm font-normal text-muted-foreground">kWh/m²</span></p>
+                  <div className="absolute bottom-4 left-4 bg-background/95 px-4 py-3 border border-foreground/20">
+                    <p className="text-[10px] font-mono text-muted-foreground tracking-wider">ENERGY USE</p>
+                    <p className="text-xl font-light text-primary font-mono">{selectedBuilding.spaceHeating} <span className="text-xs text-muted-foreground">kWh/m²</span></p>
                   </div>
-                  <div className="absolute bottom-4 right-4 bg-background/90 backdrop-blur-md rounded-lg px-4 py-3 border border-border/50">
-                    <p className="text-xs text-muted-foreground">U-Value</p>
-                    <p className="text-xl font-semibold text-foreground">{selectedBuilding.uValue} <span className="text-sm font-normal text-muted-foreground">W/m²K</span></p>
+                  <div className="absolute bottom-4 right-4 bg-background/95 px-4 py-3 border border-foreground/20">
+                    <p className="text-[10px] font-mono text-muted-foreground tracking-wider">U-VALUE</p>
+                    <p className="text-xl font-light text-analytics-pink font-mono">{selectedBuilding.uValue} <span className="text-xs text-muted-foreground">W/m²K</span></p>
                   </div>
                 </div>
               </div>
             )}
 
             {/* Energy Chart */}
-            <div className="bg-card rounded-xl border border-border p-5">
-              <div className="flex items-center justify-between mb-4">
+            <div className="border border-foreground/10 p-6">
+              <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h4 className="font-medium text-foreground">Energy Output & AI Prediction</h4>
-                  <p className="text-sm text-muted-foreground">Monthly comparison</p>
+                  <h4 className="font-light text-foreground">Energy Output</h4>
+                  <p className="text-xs font-mono text-muted-foreground tracking-wider mt-1">MONTHLY COMPARISON</p>
                 </div>
-                <div className="flex items-center gap-4 text-xs">
+                <div className="flex items-center gap-6 text-xs font-mono tracking-wider">
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-primary" />
-                    <span className="text-muted-foreground">Actual Output</span>
+                    <div className="w-3 h-px bg-primary" />
+                    <span className="text-muted-foreground">ACTUAL</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-cyan-400" />
-                    <span className="text-muted-foreground">AI Forecast</span>
+                    <div className="w-3 h-px bg-analytics-pink" />
+                    <span className="text-muted-foreground">FORECAST</span>
                   </div>
                 </div>
               </div>
               <ResponsiveContainer width="100%" height={200}>
                 <AreaChart data={energyData}>
-                  <defs>
-                    <linearGradient id="colorOutput" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={12} />
-                  <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
+                  <XAxis 
+                    dataKey="month" 
+                    stroke="hsl(var(--muted-foreground))" 
+                    fontSize={10} 
+                    tickLine={false}
+                    axisLine={{ stroke: 'hsl(var(--border))' }}
+                    fontFamily="JetBrains Mono"
+                  />
+                  <YAxis 
+                    stroke="hsl(var(--muted-foreground))" 
+                    fontSize={10} 
+                    tickLine={false}
+                    axisLine={false}
+                    fontFamily="JetBrains Mono"
+                  />
                   <Tooltip 
                     contentStyle={{ 
-                      backgroundColor: 'hsl(var(--card))', 
+                      backgroundColor: 'hsl(var(--background))', 
                       border: '1px solid hsl(var(--border))',
-                      borderRadius: '8px'
+                      fontFamily: 'JetBrains Mono',
+                      fontSize: '11px'
                     }}
                   />
-                  <Area type="monotone" dataKey="output" stroke="hsl(var(--primary))" fillOpacity={1} fill="url(#colorOutput)" strokeWidth={2} />
-                  <Area type="monotone" dataKey="forecast" stroke="#22d3ee" fill="transparent" strokeWidth={2} strokeDasharray="5 5" />
+                  <Area 
+                    type="monotone" 
+                    dataKey="output" 
+                    stroke="hsl(var(--primary))" 
+                    fill="transparent" 
+                    strokeWidth={1.5} 
+                  />
+                  <Area 
+                    type="monotone" 
+                    dataKey="forecast" 
+                    stroke="hsl(var(--analytics-pink))" 
+                    fill="transparent" 
+                    strokeWidth={1.5} 
+                    strokeDasharray="4 4" 
+                  />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
           </div>
 
           {/* Right Stats Panel */}
-          <div className="lg:col-span-3 space-y-4">
+          <div className="lg:col-span-3 space-y-6">
             {selectedBuilding && (
               <>
                 {/* Thermal Anomalies */}
-                <div className="bg-card rounded-xl border border-border p-4">
-                  <h4 className="font-medium text-foreground mb-4 flex items-center gap-2">
-                    <Thermometer className="w-4 h-4 text-primary" />
-                    Thermal Anomalies
-                  </h4>
-                  <div className="space-y-3">
+                <div className="border border-foreground/10">
+                  <div className="p-4 border-b border-foreground/10 flex items-center gap-2">
+                    <Thermometer className="w-4 h-4 text-analytics-pink" />
+                    <h4 className="font-mono text-xs tracking-wider text-muted-foreground">THERMAL ANOMALIES</h4>
+                  </div>
+                  <div className="p-4 space-y-3">
                     {selectedBuilding.thermalAnomalies.map((anomaly, i) => (
-                      <div key={i} className="flex items-start gap-3 p-3 bg-secondary/30 rounded-lg">
-                        <div className="p-2 rounded-lg bg-destructive/10">
-                          <AlertTriangle className="w-3 h-3 text-destructive" />
-                        </div>
+                      <div key={i} className="flex items-start gap-3 p-3 border border-foreground/10">
+                        <AlertTriangle className="w-3 h-3 text-analytics-pink mt-0.5" />
                         <div>
-                          <p className="text-sm font-medium text-foreground">{anomaly.type}</p>
-                          <p className="text-xs text-muted-foreground">{anomaly.description}</p>
+                          <p className="text-sm font-light text-foreground">{anomaly.type}</p>
+                          <p className="text-xs font-mono text-muted-foreground mt-1">{anomaly.description}</p>
                         </div>
                       </div>
                     ))}
@@ -451,58 +418,51 @@ const Dashboard = () => {
                 </div>
 
                 {/* EPC Distribution */}
-                <div className="bg-card rounded-xl border border-border p-4">
-                  <h4 className="font-medium text-foreground mb-4 flex items-center gap-2">
-                    <BarChart3 className="w-4 h-4 text-primary" />
-                    EPC Distribution
-                  </h4>
-                  <div className="h-32">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={ratingDistribution}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={30}
-                          outerRadius={50}
-                          paddingAngle={2}
-                          dataKey="value"
-                        >
-                          {ratingDistribution.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
-                          ))}
-                        </Pie>
-                        <Tooltip />
-                      </PieChart>
-                    </ResponsiveContainer>
+                <div className="border border-foreground/10">
+                  <div className="p-4 border-b border-foreground/10">
+                    <h4 className="font-mono text-xs tracking-wider text-muted-foreground">EPC DISTRIBUTION</h4>
                   </div>
-                  <div className="grid grid-cols-3 gap-2 mt-2">
-                    {ratingDistribution.slice(0, 3).map((item) => (
-                      <div key={item.name} className="text-center">
-                        <span className="text-xs text-muted-foreground">{item.name}</span>
-                        <p className="text-sm font-medium" style={{ color: item.color }}>{item.value}%</p>
-                      </div>
-                    ))}
+                  <div className="p-4">
+                    <ResponsiveContainer width="100%" height={120}>
+                      <BarChart data={efficiencyData} layout="horizontal">
+                        <XAxis 
+                          dataKey="name" 
+                          stroke="hsl(var(--muted-foreground))" 
+                          fontSize={10}
+                          tickLine={false}
+                          axisLine={false}
+                          fontFamily="JetBrains Mono"
+                        />
+                        <YAxis hide />
+                        <Bar 
+                          dataKey="value" 
+                          fill="hsl(var(--primary))" 
+                          radius={0}
+                        />
+                      </BarChart>
+                    </ResponsiveContainer>
                   </div>
                 </div>
 
                 {/* Risk Indexes */}
-                <div className="bg-card rounded-xl border border-border p-4">
-                  <h4 className="font-medium text-foreground mb-4">Risk Indexes</h4>
-                  <div className="space-y-3">
+                <div className="border border-foreground/10">
+                  <div className="p-4 border-b border-foreground/10">
+                    <h4 className="font-mono text-xs tracking-wider text-muted-foreground">RISK INDEXES</h4>
+                  </div>
+                  <div className="p-4 space-y-4">
                     {selectedBuilding.riskIndexes.map((risk, i) => (
                       <div key={i}>
-                        <div className="flex items-center justify-between mb-1.5">
-                          <span className="text-xs text-muted-foreground">{risk.label}</span>
-                          <span className={`text-xs flex items-center gap-1 ${risk.trend === 'up' ? 'text-destructive' : 'text-green-400'}`}>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-xs font-mono text-muted-foreground">{risk.label.toUpperCase()}</span>
+                          <span className={`text-xs font-mono flex items-center gap-1 ${risk.trend === 'up' ? 'text-analytics-pink' : 'text-analytics-green'}`}>
                             {risk.trend === 'up' ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
                             {risk.value}%
                           </span>
                         </div>
-                        <div className="h-2 bg-secondary rounded-full overflow-hidden">
+                        <div className="h-1 bg-secondary overflow-hidden">
                           <div 
-                            className={`h-full rounded-full transition-all ${
-                              risk.value > 70 ? 'bg-destructive' : risk.value > 50 ? 'bg-yellow-500' : 'bg-green-500'
+                            className={`h-full transition-all ${
+                              risk.value > 70 ? 'bg-analytics-pink' : risk.value > 50 ? 'bg-primary' : 'bg-analytics-green'
                             }`}
                             style={{ width: `${risk.value}%` }}
                           />
@@ -513,15 +473,15 @@ const Dashboard = () => {
                 </div>
 
                 {/* Building Stats */}
-                <div className="bg-card rounded-xl border border-border p-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-xs text-muted-foreground">Floor Area</p>
-                      <p className="text-lg font-semibold text-foreground">{selectedBuilding.floorArea} m²</p>
+                <div className="border border-foreground/10">
+                  <div className="grid grid-cols-2 divide-x divide-foreground/10">
+                    <div className="p-4">
+                      <p className="text-[10px] font-mono text-muted-foreground tracking-wider mb-1">FLOOR AREA</p>
+                      <p className="text-lg font-light text-foreground font-mono">{selectedBuilding.floorArea} <span className="text-xs text-muted-foreground">m²</span></p>
                     </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Annual Cost</p>
-                      <p className="text-lg font-semibold text-foreground">£{selectedBuilding.annualCost.toLocaleString()}</p>
+                    <div className="p-4">
+                      <p className="text-[10px] font-mono text-muted-foreground tracking-wider mb-1">ANNUAL COST</p>
+                      <p className="text-lg font-light text-foreground font-mono">£{selectedBuilding.annualCost.toLocaleString()}</p>
                     </div>
                   </div>
                 </div>

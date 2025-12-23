@@ -15,6 +15,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -60,12 +61,12 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        tesla: {
-          charcoal: "hsl(var(--tesla-charcoal))",
-          "dark-gray": "hsl(var(--tesla-dark-gray))",
-          "light-gray": "hsl(var(--tesla-light-gray))",
-          white: "hsl(var(--tesla-white))",
-          red: "hsl(var(--tesla-red))",
+        analytics: {
+          cyan: "hsl(var(--analytics-cyan))",
+          green: "hsl(var(--analytics-green))",
+          pink: "hsl(var(--analytics-pink))",
+          white: "hsl(var(--analytics-white))",
+          divider: "hsl(var(--analytics-divider))",
         },
       },
       borderRadius: {
