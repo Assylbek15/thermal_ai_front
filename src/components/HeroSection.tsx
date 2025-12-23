@@ -21,9 +21,9 @@ const HeroSection = () => {
         backgroundPosition: 'center',
       }}
     >
-      {/* Enhanced Gradient Overlay for contrast */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/50 to-background/90" />
-      <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-transparent to-background/60" />
+      {/* Light Gradient Overlay for text contrast */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background/60" />
+      <div className="absolute inset-0 bg-gradient-to-r from-background/30 via-transparent to-background/30" />
 
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
