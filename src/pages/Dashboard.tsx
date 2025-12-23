@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { useCountUp } from '@/hooks/useCountUp';
 import { ArrowLeft, Building2, MapPin, Search, TrendingUp, TrendingDown, Zap, AlertTriangle, Activity } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import thermalBuilding1 from '@/assets/thermal-building-1.jpg';
@@ -19,16 +21,42 @@ import ReportingSection from '@/components/dashboard/ReportingSection';
 import BuildingFilters, { FilterState } from '@/components/dashboard/BuildingFilters';
 
 const cities = [
-  { id: 'astana', name: 'Astana', country: 'Kazakhstan' },
-  { id: 'almaty', name: 'Almaty', country: 'Kazakhstan' },
-  { id: 'baku', name: 'Baku', country: 'Azerbaijan' },
-  { id: 'istanbul', name: 'Istanbul', country: 'Türkiye' },
-  { id: 'bishkek', name: 'Bishkek', country: 'Kyrgyzstan' },
-  { id: 'islamabad', name: 'Islamabad', country: 'Pakistan' },
+  { id: 'astana', name: 'Astana', country: 'Kazakhstan', buildingCount: 342 },
+  { id: 'almaty', name: 'Almaty', country: 'Kazakhstan', buildingCount: 518 },
+  { id: 'baku', name: 'Baku', country: 'Azerbaijan', buildingCount: 287 },
+  { id: 'istanbul', name: 'Istanbul', country: 'Türkiye', buildingCount: 623 },
+  { id: 'bishkek', name: 'Bishkek', country: 'Kyrgyzstan', buildingCount: 195 },
+  { id: 'islamabad', name: 'Islamabad', country: 'Pakistan', buildingCount: 412 },
 ];
 
 const buildingTypes = ['Residential', 'School', 'Hospital', 'Commercial', 'Industrial'];
 const climateZones = ['Continental', 'Humid Subtropical', 'Mediterranean', 'Semi-arid'];
+
+const CityCard = ({ city, index, onSelect }: { city: typeof cities[0]; index: number; onSelect: (id: string) => void }) => {
+  const { count } = useCountUp({ end: city.buildingCount, duration: 1500, delay: index * 100 });
+  
+  return (
+    <motion.button
+      key={city.id}
+      onClick={() => onSelect(city.id)}
+      className="group bg-background p-8 text-left transition-all duration-300 hover:bg-secondary"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+    >
+      <div className="flex items-center justify-between mb-6">
+        <Building2 className="w-5 h-5 text-primary" />
+        <span className="text-xs font-mono text-muted-foreground tracking-wider tabular-nums">{count} BUILDINGS</span>
+      </div>
+      <h3 className="text-2xl font-light text-foreground mb-1">{city.name}</h3>
+      <p className="text-sm text-muted-foreground font-mono tracking-wider">{city.country.toUpperCase()}</p>
+      <div className="mt-6 flex items-center gap-2 text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+        <span className="text-xs font-mono tracking-wider">ACCESS</span>
+        <ArrowLeft className="w-3 h-3 rotate-180" />
+      </div>
+    </motion.button>
+  );
+};
 
 interface Building {
   id: string;
@@ -158,19 +186,8 @@ const Dashboard = () => {
             <p className="text-muted-foreground max-w-xl">Select a city to access thermal analysis data for buildings across the region</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-foreground/10">
-            {cities.map((city) => (
-              <button key={city.id} onClick={() => handleCitySelect(city.id)} className="group bg-background p-8 text-left transition-all duration-300 hover:bg-secondary">
-                <div className="flex items-center justify-between mb-6">
-                  <Building2 className="w-5 h-5 text-primary" />
-                  <span className="text-xs font-mono text-muted-foreground tracking-wider">{Math.floor(Math.random() * 500) + 200} BUILDINGS</span>
-                </div>
-                <h3 className="text-2xl font-light text-foreground mb-1">{city.name}</h3>
-                <p className="text-sm text-muted-foreground font-mono tracking-wider">{city.country.toUpperCase()}</p>
-                <div className="mt-6 flex items-center gap-2 text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                  <span className="text-xs font-mono tracking-wider">ACCESS</span>
-                  <ArrowLeft className="w-3 h-3 rotate-180" />
-                </div>
-              </button>
+            {cities.map((city, index) => (
+              <CityCard key={city.id} city={city} index={index} onSelect={handleCitySelect} />
             ))}
           </div>
         </div>
