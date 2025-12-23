@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
-import { Upload, AlertTriangle, Thermometer, Droplets, Zap, X, Plus } from 'lucide-react';
+import { Upload, AlertTriangle, Thermometer, Droplets, Zap, X, Plus, Building2 } from 'lucide-react';
+import CityDashboard from './CityDashboard';
 
 interface AnalysisResult {
   id: string;
@@ -75,7 +76,10 @@ const mockResults: AnalysisResult[] = [
   },
 ];
 
+type AnalysisMode = 'selection' | 'upload' | 'city-dashboard';
+
 const ThermalAnalyzer = () => {
+  const [mode, setMode] = useState<AnalysisMode>('selection');
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showResults, setShowResults] = useState(false);
@@ -130,15 +134,82 @@ const ThermalAnalyzer = () => {
     }
   };
 
+  // Handle City Dashboard mode
+  if (mode === 'city-dashboard') {
+    return <CityDashboard onBack={() => setMode('selection')} />;
+  }
+
+  // Mode selection screen
+  if (mode === 'selection') {
+    return (
+      <section id="analyzer" className="min-h-screen flex items-center bg-background py-20">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-12 w-full">
+          <div className="text-center mb-12">
+            <p className="text-sm uppercase tracking-widest text-muted-foreground mb-4">
+              Building Analysis Tool
+            </p>
+            <h2 className="text-4xl md:text-5xl font-medium text-foreground mb-6">
+              Analyze Your Building
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Choose how you'd like to analyze thermal data - upload your own image or access the city-wide dashboard.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {/* Upload Image Option */}
+            <button
+              onClick={() => setMode('upload')}
+              className="group bg-card hover:bg-secondary/80 rounded-sm p-12 text-center transition-all duration-300 border border-border hover:border-primary"
+            >
+              <div className="p-6 rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors mx-auto w-fit mb-6">
+                <Upload className="w-12 h-12" />
+              </div>
+              <h3 className="text-2xl font-medium text-foreground mb-3">Upload Image</h3>
+              <p className="text-muted-foreground">
+                Upload a thermal image of your building to receive an instant AI-powered analysis of heat loss and insulation gaps.
+              </p>
+            </button>
+
+            {/* City Dashboard Option */}
+            <button
+              onClick={() => setMode('city-dashboard')}
+              className="group bg-card hover:bg-secondary/80 rounded-sm p-12 text-center transition-all duration-300 border border-border hover:border-primary"
+            >
+              <div className="p-6 rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors mx-auto w-fit mb-6">
+                <Building2 className="w-12 h-12" />
+              </div>
+              <h3 className="text-2xl font-medium text-foreground mb-3">City Dashboard</h3>
+              <p className="text-muted-foreground">
+                Government access portal to view thermal analysis data for buildings across multiple cities.
+              </p>
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section id="analyzer" className="min-h-screen flex items-center bg-background py-20">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 w-full">
         <div className="text-center mb-12">
+          <button
+            onClick={() => {
+              setMode('selection');
+              setUploadedImage(null);
+              setShowResults(false);
+              setSelectedResult(null);
+            }}
+            className="text-sm text-muted-foreground hover:text-foreground mb-4 inline-flex items-center gap-2"
+          >
+            ← Back to options
+          </button>
           <p className="text-sm uppercase tracking-widest text-muted-foreground mb-4">
             Building Analysis Tool
           </p>
           <h2 className="text-4xl md:text-5xl font-medium text-foreground mb-6">
-            Analyze Your Building
+            Upload Thermal Image
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Upload a thermal image of your building to receive an instant AI-powered analysis of heat loss, insulation gaps, and potential issues.
