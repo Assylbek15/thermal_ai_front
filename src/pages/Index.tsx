@@ -1,8 +1,7 @@
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
 import ProductFeatures from '@/components/ProductFeatures';
-import SizingCalculator from '@/components/SizingCalculator';
-import FAQSection from '@/components/FAQSection';
+import ThermalAnalyzer from '@/components/ThermalAnalyzer';
 import Footer from '@/components/Footer';
 
 const Index = () => {
@@ -12,8 +11,7 @@ const Index = () => {
       <main>
         <HeroSection />
         <ProductFeatures />
-        <SizingCalculator />
-        <FAQSection />
+        <ThermalAnalyzer />
       </main>
       <Footer />
     </div>
