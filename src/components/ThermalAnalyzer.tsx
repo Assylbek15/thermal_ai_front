@@ -23,8 +23,8 @@ const mockResults: AnalysisResult[] = [
     severity: 'high',
     title: 'Install cavity wall insulation',
     description: 'Installing cavity wall insulation keeps your home warmer, cuts heating bills, and boosts energy efficiency.',
-    cost: '£5,000',
-    savings: '£405',
+    cost: '$5,000',
+    savings: '$405',
     payback: '12 years',
     position: { x: 25, y: 40 },
     uValue: '5.8 W/m²K',
@@ -35,8 +35,8 @@ const mockResults: AnalysisResult[] = [
     severity: 'medium',
     title: 'Roof insulation upgrade',
     description: 'Your roof shows significant heat loss. Adding insulation would reduce energy consumption by up to 25%.',
-    cost: '£2,500',
-    savings: '£280',
+    cost: '$2,500',
+    savings: '$280',
     payback: '9 years',
     position: { x: 50, y: 15 },
     kwhPerYear: '220 kWh/m²/yr',
@@ -47,8 +47,8 @@ const mockResults: AnalysisResult[] = [
     severity: 'medium',
     title: 'Moisture detected in wall',
     description: 'Thermal signature indicates possible moisture ingress in the eastern wall. Recommend further investigation.',
-    cost: '£800',
-    savings: '£150',
+    cost: '$800',
+    savings: '$150',
     payback: '5 years',
     position: { x: 75, y: 45 },
   },
@@ -58,8 +58,8 @@ const mockResults: AnalysisResult[] = [
     severity: 'low',
     title: 'Window seal degradation',
     description: 'Minor heat loss detected around window frames. Resealing would improve energy efficiency.',
-    cost: '£300',
-    savings: '£60',
+    cost: '$300',
+    savings: '$60',
     payback: '5 years',
     position: { x: 60, y: 55 },
   },
@@ -69,8 +69,8 @@ const mockResults: AnalysisResult[] = [
     severity: 'low',
     title: 'Normal thermal reading',
     description: 'Electrical systems showing normal operating temperatures. No immediate action required.',
-    cost: '£0',
-    savings: '£0',
+    cost: '$0',
+    savings: '$0',
     payback: 'N/A',
     position: { x: 85, y: 70 },
   },
@@ -433,7 +433,7 @@ const ThermalAnalyzer = () => {
                           <p className="text-xs text-muted-foreground">Issues Found</p>
                         </div>
                         <div>
-                          <p className="text-2xl font-medium text-primary">£895</p>
+                          <p className="text-2xl font-medium text-primary">$895</p>
                           <p className="text-xs text-muted-foreground">Potential Savings/yr</p>
                         </div>
                       </div>
