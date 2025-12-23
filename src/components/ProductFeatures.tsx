@@ -1,7 +1,33 @@
+import { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import FeatureSection from './FeatureSection';
-import { Thermometer, Zap, Droplets, Wind, Shield, Eye } from 'lucide-react';
+import { Thermometer, Droplets, Wind } from 'lucide-react';
 
 const ProductFeatures = () => {
+  const capabilitiesRef = useRef(null);
+  const isInView = useInView(capabilitiesRef, { once: true, margin: "-100px" });
+
+  const features = [
+    {
+      title: 'Insulation Assessment',
+      description:
+        'Validate insulation effectiveness to reveal performance gaps that compromise energy efficiency.',
+      icon: <Thermometer className="w-12 h-12 text-primary mb-4" />,
+    },
+    {
+      title: 'Moisture Detection',
+      description:
+        'Expose the heat signature of hidden moisture intrusion to prevent costly damage and mold growth.',
+      icon: <Droplets className="w-12 h-12 text-primary mb-4" />,
+    },
+    {
+      title: 'HVAC Optimization',
+      description:
+        'Diagnose duct leaks and insulation flaws to optimize performance and cut energy waste.',
+      icon: <Wind className="w-12 h-12 text-primary mb-4" />,
+    },
+  ];
+
   return (
     <>
       {/* Heat Loss Detection Section */}
@@ -34,56 +60,72 @@ const ProductFeatures = () => {
       {/* Capabilities Section */}
       <section
         id="capabilities"
+        ref={capabilitiesRef}
         className="min-h-screen flex items-center bg-card py-20"
       >
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-12 w-full">
+        <motion.div 
+          className="max-w-[1400px] mx-auto px-6 lg:px-12 w-full"
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.8 }}
+        >
           <div className="text-center mb-16">
-            <p className="text-sm uppercase tracking-widest text-muted-foreground mb-4">
+            <motion.p 
+              className="text-sm uppercase tracking-widest text-muted-foreground mb-4"
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+              transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
+            >
               Advanced Capabilities
-            </p>
-            <h2 className="text-4xl md:text-5xl font-medium text-foreground mb-6">
+            </motion.p>
+            <motion.h2 
+              className="text-4xl md:text-5xl font-medium text-foreground mb-6"
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            >
               Comprehensive Building Analysis
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            </motion.h2>
+            <motion.p 
+              className="text-lg text-muted-foreground max-w-2xl mx-auto"
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+              transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+            >
               Our AI-powered thermal imaging platform provides complete visibility into your building's thermal performance, from insulation to HVAC systems.
-            </p>
+            </motion.p>
           </div>
 
           {/* Feature Grid */}
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                title: 'Insulation Assessment',
-                description:
-                  'Validate insulation effectiveness to reveal performance gaps that compromise energy efficiency.',
-                icon: <Thermometer className="w-12 h-12 text-primary mb-4" />,
-              },
-              {
-                title: 'Moisture Detection',
-                description:
-                  'Expose the heat signature of hidden moisture intrusion to prevent costly damage and mold growth.',
-                icon: <Droplets className="w-12 h-12 text-primary mb-4" />,
-              },
-              {
-                title: 'HVAC Optimization',
-                description:
-                  'Diagnose duct leaks and insulation flaws to optimize performance and cut energy waste.',
-                icon: <Wind className="w-12 h-12 text-primary mb-4" />,
-              },
-            ].map((feature, index) => (
-              <div
+            {features.map((feature, index) => (
+              <motion.div
                 key={index}
-                className="bg-secondary/50 p-8 rounded-sm text-center hover:bg-secondary transition-colors"
+                className="bg-secondary/50 p-8 rounded-sm text-center group cursor-pointer"
+                initial={{ opacity: 0, y: 50 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+                transition={{ duration: 0.6, delay: 0.4 + index * 0.15, ease: "easeOut" }}
+                whileHover={{ 
+                  y: -8, 
+                  backgroundColor: "hsl(var(--secondary))",
+                  transition: { duration: 0.3, ease: "easeOut" }
+                }}
               >
-                <div className="flex justify-center">{feature.icon}</div>
+                <motion.div 
+                  className="flex justify-center"
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  {feature.icon}
+                </motion.div>
                 <h3 className="text-xl font-medium text-foreground mb-3">
                   {feature.title}
                 </h3>
                 <p className="text-muted-foreground">{feature.description}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Dashboard Section */}
