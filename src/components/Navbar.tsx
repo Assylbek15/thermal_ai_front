@@ -33,9 +33,10 @@ const Navbar = () => {
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
           <div className="flex items-center justify-between h-14">
             {/* Logo */}
-            <a href="#" className="flex items-center gap-2">
-              <span className="text-xl font-bold text-foreground">Inspekt</span>
-              <span className="text-xl font-bold text-primary">AI</span>
+            <a href="#" className="flex items-center gap-1">
+              <span className="text-xl font-bold text-foreground">CECECO</span>
+              <span className="text-xl font-bold text-muted-foreground mx-1">×</span>
+              <span className="text-xl font-bold text-primary">Thermal AI</span>
             </a>
 
             {/* Desktop Navigation */}

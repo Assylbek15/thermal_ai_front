@@ -117,7 +117,7 @@ const Footer = () => {
             </a>
           </div>
           <p className="text-sm text-muted-foreground">
-            © 2025 InspektAI. All rights reserved.
+            © 2025 CECECO × Thermal AI. All rights reserved.
           </p>
         </div>
       </div>
