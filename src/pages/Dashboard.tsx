@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Building2, Search, TrendingUp, TrendingDown } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { ArrowLeft, Building2, Thermometer, Droplets, TrendingUp, TrendingDown, MapPin, Search, Zap, BarChart3, Activity, AlertTriangle } from 'lucide-react';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 import thermalBuilding1 from '@/assets/thermal-building-1.jpg';
 import thermalBuilding2 from '@/assets/thermal-building-2.jpg';
 import thermalBuilding3 from '@/assets/thermal-building-3.jpg';
@@ -83,30 +83,22 @@ const generateMockBuildings = (cityId: string): Building[] => {
   }));
 };
 
-const energyHistogram = [
-  { range: '0', count: 8000 },
-  { range: '1', count: 35000 },
-  { range: '2', count: 18000 },
-  { range: '3', count: 8000 },
-  { range: '4', count: 4000 },
-  { range: '5', count: 2000 },
+const energyData = [
+  { month: 'Jan', output: 320, forecast: 300 },
+  { month: 'Feb', output: 280, forecast: 310 },
+  { month: 'Mar', output: 350, forecast: 340 },
+  { month: 'Apr', output: 420, forecast: 380 },
+  { month: 'May', output: 380, forecast: 400 },
+  { month: 'Jun', output: 450, forecast: 420 },
 ];
 
-const efficiencyTrend = [
-  { month: 'Jan', rate: 42 },
-  { month: 'Feb', rate: 38 },
-  { month: 'Mar', rate: 35 },
-  { month: 'Apr', rate: 32 },
-  { month: 'May', rate: 28 },
-  { month: 'Jun', rate: 22 },
-];
-
-const sessionData = [
-  { x: 0, pvs: 1.6, sessions: 40 },
-  { x: 1, pvs: 2.4, sessions: 55 },
-  { x: 2, pvs: 3.2, sessions: 75 },
-  { x: 3, pvs: 2.8, sessions: 82 },
-  { x: 4, pvs: 3.4, sessions: 90 },
+const ratingDistribution = [
+  { name: 'A', value: 15, color: '#22c55e' },
+  { name: 'B', value: 25, color: '#4ade80' },
+  { name: 'C', value: 30, color: '#facc15' },
+  { name: 'D', value: 18, color: '#fb923c' },
+  { name: 'E', value: 8, color: '#f97316' },
+  { name: 'F', value: 4, color: '#ef4444' },
 ];
 
 const Dashboard = () => {
@@ -129,6 +121,18 @@ const Dashboard = () => {
       b.district.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const getEpcColor = (rating: string) => {
+    const colors: Record<string, string> = {
+      A: 'bg-green-500',
+      B: 'bg-green-400',
+      C: 'bg-yellow-400',
+      D: 'bg-orange-400',
+      E: 'bg-orange-500',
+      F: 'bg-red-500',
+    };
+    return colors[rating] || 'bg-muted';
+  };
+
   const currentCity = cities.find((c) => c.id === selectedCity);
 
   // City selection screen
@@ -144,34 +148,48 @@ const Dashboard = () => {
             Back to Home
           </button>
 
-          <div className="text-center mb-16">
-            <p className="text-dashboard-cyan text-xs font-medium tracking-[0.3em] uppercase mb-4">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm mb-6">
+              <Building2 className="w-4 h-4" />
               Government Access Portal
-            </p>
-            <h1 className="text-5xl md:text-6xl font-light text-foreground tracking-tight mb-4">
+            </div>
+            <h1 className="text-4xl md:text-5xl font-medium text-foreground mb-4">
               City Dashboard
             </h1>
-            <p className="text-muted-foreground max-w-xl mx-auto">
-              Select a city to access thermal analysis data
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Select a city to access thermal analysis data for buildings across the region
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-dashboard-divider max-w-5xl mx-auto border border-dashboard-divider">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {cities.map((city) => (
               <button
                 key={city.id}
                 onClick={() => handleCitySelect(city.id)}
-                className="group bg-background p-8 text-left transition-all duration-300 hover:bg-secondary/30"
+                className="group relative bg-card hover:bg-card/80 rounded-lg p-8 text-left transition-all duration-500 border border-border hover:border-primary/50 overflow-hidden"
               >
-                <div className="flex items-start justify-between mb-6">
-                  <Building2 className="w-5 h-5 text-dashboard-cyan" />
-                  <ArrowLeft className="w-4 h-4 rotate-180 text-muted-foreground group-hover:text-dashboard-cyan transition-colors" />
+                {/* Glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                <div className="relative z-10">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 text-primary group-hover:from-primary group-hover:to-primary/80 group-hover:text-primary-foreground transition-all duration-300">
+                      <Building2 className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-medium text-foreground">{city.name}</h3>
+                      <p className="text-sm text-muted-foreground">{city.country}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm text-muted-foreground">
+                      {Math.floor(Math.random() * 500) + 200} buildings analyzed
+                    </p>
+                    <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all">
+                      <ArrowLeft className="w-4 h-4 rotate-180" />
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-xl font-medium text-foreground mb-1">{city.name}</h3>
-                <p className="text-sm text-muted-foreground mb-4">{city.country}</p>
-                <p className="text-xs text-muted-foreground">
-                  {Math.floor(Math.random() * 500) + 200} buildings
-                </p>
               </button>
             ))}
           </div>
@@ -182,322 +200,335 @@ const Dashboard = () => {
 
   // Main dashboard view
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* Header */}
-      <header className="border-b border-dashboard-divider">
+    <div className="min-h-screen bg-background">
+      {/* Top Navigation */}
+      <header className="border-b border-border bg-card/50 backdrop-blur-xl sticky top-0 z-50">
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-6">
             <button
               onClick={() => setSelectedCity(null)}
-              className="text-muted-foreground hover:text-foreground transition-colors"
+              className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
-            <div className="flex items-center gap-3">
-              <h1 className="text-lg font-medium text-foreground tracking-tight">
-                {currentCity?.name}
-              </h1>
-              <span className="text-xs text-muted-foreground px-2 py-1 border border-dashboard-divider">
-                {filteredBuildings.length} buildings
-              </span>
+            <div>
+              <h1 className="text-xl font-medium text-foreground">{currentCity?.name}</h1>
+              <p className="text-sm text-muted-foreground">{filteredBuildings.length} buildings • Last updated: Today</p>
             </div>
           </div>
 
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-4 py-2 bg-transparent border border-dashboard-divider text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-dashboard-cyan w-64"
-            />
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="Search buildings..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 pr-4 py-2 bg-secondary/50 border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 w-72"
+              />
+            </div>
           </div>
         </div>
       </header>
 
-      <div className="flex">
-        {/* Left Sidebar - Buildings List */}
-        <aside className="w-72 border-r border-dashboard-divider min-h-[calc(100vh-57px)]">
-          <div className="p-4 border-b border-dashboard-divider">
-            <span className="text-xs text-muted-foreground tracking-wider uppercase">Buildings</span>
+      <div className="p-6">
+        {/* Stats Overview */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div className="bg-gradient-to-br from-card to-card/50 rounded-xl p-5 border border-border">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-sm text-muted-foreground">Total Buildings</span>
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Building2 className="w-4 h-4 text-primary" />
+              </div>
+            </div>
+            <p className="text-3xl font-semibold text-foreground">{filteredBuildings.length}</p>
+            <p className="text-xs text-green-400 flex items-center gap-1 mt-1">
+              <TrendingUp className="w-3 h-3" /> +12% from last month
+            </p>
           </div>
-          <div className="overflow-y-auto max-h-[calc(100vh-120px)]">
-            {filteredBuildings.map((building) => (
-              <button
-                key={building.id}
-                onClick={() => setSelectedBuilding(building)}
-                className={`w-full flex gap-3 p-4 border-b border-dashboard-divider text-left transition-all ${
-                  selectedBuilding?.id === building.id
-                    ? 'bg-dashboard-cyan/5 border-l-2 border-l-dashboard-cyan'
-                    : 'hover:bg-secondary/20'
-                }`}
-              >
-                <img
-                  src={building.image}
-                  alt={building.address}
-                  className="w-12 h-12 object-cover"
-                />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-foreground truncate">{building.address}</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">{building.district}</p>
-                  <div className="flex items-center gap-2 mt-2">
-                    <span className="text-xs text-dashboard-cyan">{building.epcRating}</span>
-                    <span className="text-xs text-muted-foreground">{building.efficiency}%</span>
+
+          <div className="bg-gradient-to-br from-card to-card/50 rounded-xl p-5 border border-border">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-sm text-muted-foreground">Avg. Efficiency</span>
+              <div className="p-2 rounded-lg bg-green-500/10">
+                <Zap className="w-4 h-4 text-green-400" />
+              </div>
+            </div>
+            <p className="text-3xl font-semibold text-foreground">74<span className="text-lg text-muted-foreground">%</span></p>
+            <p className="text-xs text-green-400 flex items-center gap-1 mt-1">
+              <TrendingUp className="w-3 h-3" /> +5% improvement
+            </p>
+          </div>
+
+          <div className="bg-gradient-to-br from-card to-card/50 rounded-xl p-5 border border-border">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-sm text-muted-foreground">Heat Loss Alerts</span>
+              <div className="p-2 rounded-lg bg-destructive/10">
+                <AlertTriangle className="w-4 h-4 text-destructive" />
+              </div>
+            </div>
+            <p className="text-3xl font-semibold text-foreground">23</p>
+            <p className="text-xs text-destructive flex items-center gap-1 mt-1">
+              <TrendingDown className="w-3 h-3" /> 8 critical issues
+            </p>
+          </div>
+
+          <div className="bg-gradient-to-br from-card to-card/50 rounded-xl p-5 border border-border">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-sm text-muted-foreground">Energy Saved</span>
+              <div className="p-2 rounded-lg bg-cyan-500/10">
+                <Activity className="w-4 h-4 text-cyan-400" />
+              </div>
+            </div>
+            <p className="text-3xl font-semibold text-foreground">1.2<span className="text-lg text-muted-foreground">MW</span></p>
+            <p className="text-xs text-green-400 flex items-center gap-1 mt-1">
+              <TrendingUp className="w-3 h-3" /> This quarter
+            </p>
+          </div>
+        </div>
+
+        <div className="grid lg:grid-cols-12 gap-6">
+          {/* Buildings List */}
+          <div className="lg:col-span-3 bg-card rounded-xl border border-border overflow-hidden">
+            <div className="p-4 border-b border-border">
+              <h3 className="font-medium text-foreground">Buildings</h3>
+            </div>
+            <div className="max-h-[600px] overflow-y-auto">
+              {filteredBuildings.map((building) => (
+                <button
+                  key={building.id}
+                  onClick={() => setSelectedBuilding(building)}
+                  className={`w-full flex gap-3 p-3 border-b border-border/50 transition-all text-left ${
+                    selectedBuilding?.id === building.id
+                      ? 'bg-primary/10 border-l-2 border-l-primary'
+                      : 'hover:bg-secondary/50'
+                  }`}
+                >
+                  <img
+                    src={building.image}
+                    alt={building.address}
+                    className="w-14 h-14 object-cover rounded-lg"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-foreground truncate">{building.address}</p>
+                    <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
+                      <MapPin className="w-3 h-3" />
+                      {building.district}
+                    </p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <span className={`px-1.5 py-0.5 text-xs font-bold rounded ${getEpcColor(building.epcRating)} text-white`}>
+                        {building.epcRating}
+                      </span>
+                      <span className="text-xs text-muted-foreground">{building.efficiency}% eff.</span>
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Main Content Area */}
+          <div className="lg:col-span-6 space-y-6">
+            {/* Thermal Image */}
+            {selectedBuilding && (
+              <div className="bg-card rounded-xl border border-border overflow-hidden">
+                <div className="p-4 border-b border-border flex items-center justify-between">
+                  <div>
+                    <h3 className="font-medium text-foreground">{selectedBuilding.address}</h3>
+                    <p className="text-sm text-muted-foreground">{selectedBuilding.district}</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <span className="px-3 py-1.5 bg-primary/10 text-primary text-xs font-medium rounded-full">Thermal</span>
+                    <span className="px-3 py-1.5 bg-secondary text-muted-foreground text-xs font-medium rounded-full">RGB</span>
                   </div>
                 </div>
-              </button>
-            ))}
-          </div>
-        </aside>
-
-        {/* Main Content */}
-        <main className="flex-1 p-6">
-          {/* Top Stats Row */}
-          <div className="grid grid-cols-4 gap-px bg-dashboard-divider border border-dashboard-divider mb-6">
-            <div className="bg-background p-5">
-              <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">Buildings Analyzed</p>
-              <p className="text-3xl font-light text-dashboard-cyan">{filteredBuildings.length}</p>
-              <p className="text-xs text-dashboard-green flex items-center gap-1 mt-2">
-                <TrendingUp className="w-3 h-3" /> +12%
-              </p>
-            </div>
-            <div className="bg-background p-5">
-              <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">Avg. Efficiency</p>
-              <p className="text-3xl font-light text-foreground">74<span className="text-lg text-muted-foreground">%</span></p>
-              <p className="text-xs text-dashboard-green flex items-center gap-1 mt-2">
-                <TrendingUp className="w-3 h-3" /> +5%
-              </p>
-            </div>
-            <div className="bg-background p-5">
-              <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">Heat Loss Alerts</p>
-              <p className="text-3xl font-light text-dashboard-pink">23</p>
-              <p className="text-xs text-dashboard-pink flex items-center gap-1 mt-2">
-                <TrendingDown className="w-3 h-3" /> 8 critical
-              </p>
-            </div>
-            <div className="bg-background p-5">
-              <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">Energy Saved</p>
-              <p className="text-3xl font-light text-foreground">1.2<span className="text-lg text-muted-foreground">MW</span></p>
-              <p className="text-xs text-dashboard-green flex items-center gap-1 mt-2">
-                <TrendingUp className="w-3 h-3" /> Q4 2025
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-12 gap-6">
-            {/* Main Chart Area */}
-            <div className="col-span-8 space-y-6">
-              {/* Energy Distribution Chart */}
-              <div className="border border-dashboard-divider">
-                <div className="flex items-center justify-between p-4 border-b border-dashboard-divider">
-                  <span className="text-xs text-muted-foreground uppercase tracking-wider">Energy Use vs Efficiency Rate</span>
-                  <span className="text-xs text-muted-foreground">Median: 1.03s</span>
+                <div className="relative">
+                  <img
+                    src={selectedBuilding.image}
+                    alt={selectedBuilding.address}
+                    className="w-full h-80 object-cover"
+                  />
+                  {/* Hotspot markers with animation */}
+                  <div
+                    className="absolute w-10 h-10 rounded-full bg-yellow-500/80 flex items-center justify-center cursor-pointer hover:scale-110 transition-transform animate-pulse"
+                    style={{ top: '30%', left: '40%' }}
+                  >
+                    <span className="text-sm font-bold text-black">+</span>
+                  </div>
+                  <div
+                    className="absolute w-10 h-10 rounded-full bg-orange-500/80 flex items-center justify-center cursor-pointer hover:scale-110 transition-transform animate-pulse"
+                    style={{ top: '50%', left: '65%' }}
+                  >
+                    <span className="text-sm font-bold text-black">+</span>
+                  </div>
+                  <div
+                    className="absolute w-10 h-10 rounded-full bg-red-500/80 flex items-center justify-center cursor-pointer hover:scale-110 transition-transform animate-pulse"
+                    style={{ top: '25%', left: '70%' }}
+                  >
+                    <span className="text-sm font-bold text-black">+</span>
+                  </div>
+                  
+                  {/* Info overlays */}
+                  <div className="absolute bottom-4 left-4 bg-background/90 backdrop-blur-md rounded-lg px-4 py-3 border border-border/50">
+                    <p className="text-xs text-muted-foreground">Energy Use</p>
+                    <p className="text-xl font-semibold text-foreground">{selectedBuilding.spaceHeating} <span className="text-sm font-normal text-muted-foreground">kWh/m²</span></p>
+                  </div>
+                  <div className="absolute bottom-4 right-4 bg-background/90 backdrop-blur-md rounded-lg px-4 py-3 border border-border/50">
+                    <p className="text-xs text-muted-foreground">U-Value</p>
+                    <p className="text-xl font-semibold text-foreground">{selectedBuilding.uValue} <span className="text-sm font-normal text-muted-foreground">W/m²K</span></p>
+                  </div>
                 </div>
-                <div className="p-6">
-                  <div className="h-48">
+              </div>
+            )}
+
+            {/* Energy Chart */}
+            <div className="bg-card rounded-xl border border-border p-5">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h4 className="font-medium text-foreground">Energy Output & AI Prediction</h4>
+                  <p className="text-sm text-muted-foreground">Monthly comparison</p>
+                </div>
+                <div className="flex items-center gap-4 text-xs">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-primary" />
+                    <span className="text-muted-foreground">Actual Output</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-cyan-400" />
+                    <span className="text-muted-foreground">AI Forecast</span>
+                  </div>
+                </div>
+              </div>
+              <ResponsiveContainer width="100%" height={200}>
+                <AreaChart data={energyData}>
+                  <defs>
+                    <linearGradient id="colorOutput" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={12} />
+                  <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: 'hsl(var(--card))', 
+                      border: '1px solid hsl(var(--border))',
+                      borderRadius: '8px'
+                    }}
+                  />
+                  <Area type="monotone" dataKey="output" stroke="hsl(var(--primary))" fillOpacity={1} fill="url(#colorOutput)" strokeWidth={2} />
+                  <Area type="monotone" dataKey="forecast" stroke="#22d3ee" fill="transparent" strokeWidth={2} strokeDasharray="5 5" />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* Right Stats Panel */}
+          <div className="lg:col-span-3 space-y-4">
+            {selectedBuilding && (
+              <>
+                {/* Thermal Anomalies */}
+                <div className="bg-card rounded-xl border border-border p-4">
+                  <h4 className="font-medium text-foreground mb-4 flex items-center gap-2">
+                    <Thermometer className="w-4 h-4 text-primary" />
+                    Thermal Anomalies
+                  </h4>
+                  <div className="space-y-3">
+                    {selectedBuilding.thermalAnomalies.map((anomaly, i) => (
+                      <div key={i} className="flex items-start gap-3 p-3 bg-secondary/30 rounded-lg">
+                        <div className="p-2 rounded-lg bg-destructive/10">
+                          <AlertTriangle className="w-3 h-3 text-destructive" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-foreground">{anomaly.type}</p>
+                          <p className="text-xs text-muted-foreground">{anomaly.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* EPC Distribution */}
+                <div className="bg-card rounded-xl border border-border p-4">
+                  <h4 className="font-medium text-foreground mb-4 flex items-center gap-2">
+                    <BarChart3 className="w-4 h-4 text-primary" />
+                    EPC Distribution
+                  </h4>
+                  <div className="h-32">
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={energyHistogram} barCategoryGap="15%">
-                        <XAxis 
-                          dataKey="range" 
-                          axisLine={false}
-                          tickLine={false}
-                          tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
-                        />
-                        <YAxis 
-                          axisLine={false}
-                          tickLine={false}
-                          tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
-                          tickFormatter={(v) => `${v / 1000}K`}
-                        />
-                        <Bar dataKey="count" fill="hsl(var(--dashboard-cyan))" />
-                      </BarChart>
+                      <PieChart>
+                        <Pie
+                          data={ratingDistribution}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={30}
+                          outerRadius={50}
+                          paddingAngle={2}
+                          dataKey="value"
+                        >
+                          {ratingDistribution.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                        </Pie>
+                        <Tooltip />
+                      </PieChart>
                     </ResponsiveContainer>
                   </div>
-                  <div className="flex items-center gap-6 mt-4 pt-4 border-t border-dashboard-divider">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-0.5 bg-dashboard-cyan" />
-                      <span className="text-xs text-muted-foreground">Energy Use (kWh)</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-0.5 bg-dashboard-pink" />
-                      <span className="text-xs text-muted-foreground">Efficiency Rate</span>
-                    </div>
+                  <div className="grid grid-cols-3 gap-2 mt-2">
+                    {ratingDistribution.slice(0, 3).map((item) => (
+                      <div key={item.name} className="text-center">
+                        <span className="text-xs text-muted-foreground">{item.name}</span>
+                        <p className="text-sm font-medium" style={{ color: item.color }}>{item.value}%</p>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              </div>
 
-              {/* Sessions Stats */}
-              <div className="grid grid-cols-3 gap-px bg-dashboard-divider border border-dashboard-divider">
-                <div className="bg-background p-5">
-                  <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">Sessions (LUX)</p>
-                  <p className="text-4xl font-light text-dashboard-cyan">479K</p>
-                  <p className="text-xs text-muted-foreground mt-1">4 pvs</p>
-                </div>
-                <div className="bg-background p-5">
-                  <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">Session Length (LUX)</p>
-                  <p className="text-4xl font-light text-dashboard-cyan">17<span className="text-lg">min</span></p>
-                </div>
-                <div className="bg-background p-5">
-                  <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">PVs Per Session (LUX)</p>
-                  <p className="text-4xl font-light text-dashboard-pink">2<span className="text-lg">pvs</span></p>
-                </div>
-              </div>
-
-              {/* Line Charts */}
-              <div className="border border-dashboard-divider p-6">
-                <div className="h-40">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={sessionData}>
-                      <XAxis 
-                        dataKey="x" 
-                        axisLine={false}
-                        tickLine={false}
-                        tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
-                      />
-                      <YAxis 
-                        yAxisId="left"
-                        axisLine={false}
-                        tickLine={false}
-                        tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
-                        tickFormatter={(v) => `${v} pvs`}
-                      />
-                      <YAxis 
-                        yAxisId="right"
-                        orientation="right"
-                        axisLine={false}
-                        tickLine={false}
-                        tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
-                        tickFormatter={(v) => `${v}K`}
-                      />
-                      <Line 
-                        yAxisId="left"
-                        type="monotone" 
-                        dataKey="pvs" 
-                        stroke="hsl(var(--dashboard-lime))" 
-                        strokeWidth={2}
-                        dot={false}
-                      />
-                      <Line 
-                        yAxisId="right"
-                        type="monotone" 
-                        dataKey="sessions" 
-                        stroke="hsl(var(--dashboard-green))" 
-                        strokeWidth={2}
-                        dot={false}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Panel - Building Details */}
-            <div className="col-span-4 space-y-6">
-              {selectedBuilding && (
-                <>
-                  {/* Thermal Image */}
-                  <div className="border border-dashboard-divider">
-                    <div className="p-4 border-b border-dashboard-divider">
-                      <p className="text-xs text-muted-foreground uppercase tracking-wider">{selectedBuilding.address}</p>
-                    </div>
-                    <div className="relative">
-                      <img
-                        src={selectedBuilding.image}
-                        alt={selectedBuilding.address}
-                        className="w-full h-48 object-cover"
-                      />
-                    </div>
-                    <div className="grid grid-cols-2 gap-px bg-dashboard-divider">
-                      <div className="bg-background p-4">
-                        <p className="text-xs text-muted-foreground">Energy Use</p>
-                        <p className="text-lg font-light text-foreground">{selectedBuilding.spaceHeating} <span className="text-xs text-muted-foreground">kWh/m²</span></p>
-                      </div>
-                      <div className="bg-background p-4">
-                        <p className="text-xs text-muted-foreground">U-Value</p>
-                        <p className="text-lg font-light text-foreground">{selectedBuilding.uValue} <span className="text-xs text-muted-foreground">W/m²K</span></p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Risk Indexes */}
-                  <div className="border border-dashboard-divider">
-                    <div className="p-4 border-b border-dashboard-divider">
-                      <span className="text-xs text-muted-foreground uppercase tracking-wider">Risk Indexes</span>
-                    </div>
-                    <div className="divide-y divide-dashboard-divider">
-                      {selectedBuilding.riskIndexes.map((risk, i) => (
-                        <div key={i} className="p-4 flex items-center justify-between">
-                          <span className="text-sm text-muted-foreground">{risk.label}</span>
-                          <div className="flex items-center gap-3">
-                            <div className="w-24 h-1 bg-secondary overflow-hidden">
-                              <div 
-                                className={`h-full transition-all ${
-                                  risk.value > 70 ? 'bg-dashboard-pink' : risk.value > 50 ? 'bg-dashboard-cyan' : 'bg-dashboard-green'
-                                }`}
-                                style={{ width: `${risk.value}%` }}
-                              />
-                            </div>
-                            <span className={`text-sm font-medium ${
-                              risk.trend === 'up' ? 'text-dashboard-pink' : 'text-dashboard-green'
-                            }`}>
-                              {risk.value}%
-                            </span>
-                          </div>
+                {/* Risk Indexes */}
+                <div className="bg-card rounded-xl border border-border p-4">
+                  <h4 className="font-medium text-foreground mb-4">Risk Indexes</h4>
+                  <div className="space-y-3">
+                    {selectedBuilding.riskIndexes.map((risk, i) => (
+                      <div key={i}>
+                        <div className="flex items-center justify-between mb-1.5">
+                          <span className="text-xs text-muted-foreground">{risk.label}</span>
+                          <span className={`text-xs flex items-center gap-1 ${risk.trend === 'up' ? 'text-destructive' : 'text-green-400'}`}>
+                            {risk.trend === 'up' ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+                            {risk.value}%
+                          </span>
                         </div>
-                      ))}
-                    </div>
+                        <div className="h-2 bg-secondary rounded-full overflow-hidden">
+                          <div 
+                            className={`h-full rounded-full transition-all ${
+                              risk.value > 70 ? 'bg-destructive' : risk.value > 50 ? 'bg-yellow-500' : 'bg-green-500'
+                            }`}
+                            style={{ width: `${risk.value}%` }}
+                          />
+                        </div>
+                      </div>
+                    ))}
                   </div>
+                </div>
 
-                  {/* Building Stats */}
-                  <div className="grid grid-cols-2 gap-px bg-dashboard-divider border border-dashboard-divider">
-                    <div className="bg-background p-4">
-                      <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Floor Area</p>
-                      <p className="text-xl font-light text-foreground">{selectedBuilding.floorArea} <span className="text-sm text-muted-foreground">m²</span></p>
+                {/* Building Stats */}
+                <div className="bg-card rounded-xl border border-border p-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-xs text-muted-foreground">Floor Area</p>
+                      <p className="text-lg font-semibold text-foreground">{selectedBuilding.floorArea} m²</p>
                     </div>
-                    <div className="bg-background p-4">
-                      <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Annual Cost</p>
-                      <p className="text-xl font-light text-foreground">£{selectedBuilding.annualCost.toLocaleString()}</p>
-                    </div>
-                  </div>
-
-                  {/* Efficiency Trend */}
-                  <div className="border border-dashboard-divider">
-                    <div className="p-4 border-b border-dashboard-divider">
-                      <span className="text-xs text-muted-foreground uppercase tracking-wider">Efficiency Trend</span>
-                    </div>
-                    <div className="p-4 h-32">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <LineChart data={efficiencyTrend}>
-                          <XAxis 
-                            dataKey="month" 
-                            axisLine={false}
-                            tickLine={false}
-                            tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
-                          />
-                          <YAxis 
-                            axisLine={false}
-                            tickLine={false}
-                            tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
-                            domain={[0, 50]}
-                            tickFormatter={(v) => `${v}%`}
-                          />
-                          <Line 
-                            type="monotone" 
-                            dataKey="rate" 
-                            stroke="hsl(var(--dashboard-pink))" 
-                            strokeWidth={1.5}
-                            dot={false}
-                          />
-                        </LineChart>
-                      </ResponsiveContainer>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Annual Cost</p>
+                      <p className="text-lg font-semibold text-foreground">£{selectedBuilding.annualCost.toLocaleString()}</p>
                     </div>
                   </div>
-                </>
-              )}
-            </div>
+                </div>
+              </>
+            )}
           </div>
-        </main>
+        </div>
       </div>
     </div>
   );

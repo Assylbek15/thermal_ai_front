@@ -67,14 +67,6 @@ export default {
           white: "hsl(var(--tesla-white))",
           red: "hsl(var(--tesla-red))",
         },
-        dashboard: {
-          cyan: "hsl(var(--dashboard-cyan))",
-          teal: "hsl(var(--dashboard-teal))",
-          pink: "hsl(var(--dashboard-pink))",
-          green: "hsl(var(--dashboard-green))",
-          lime: "hsl(var(--dashboard-lime))",
-          divider: "hsl(var(--dashboard-divider))",
-        },
       },
       borderRadius: {
         lg: "var(--radius)",
