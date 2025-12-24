@@ -24,23 +24,24 @@ const HeroSection = () => {
       >
         <video
           autoPlay
+          loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover scale-150"
+          className="absolute inset-0 w-full h-full object-cover scale-105"
         >
           <source src="/videos/thermal-hero.mp4" type="video/mp4" />
         </video>
       </motion.div>
       
-      {/* Dark overlay for contrast - reduced opacity */}
-      <div className="absolute inset-0 bg-black/25" />
+      {/* Dark overlay for contrast */}
+      <div className="absolute inset-0 bg-black/50" />
       
       {/* Thermal glow overlay */}
-      <div className="absolute inset-0 thermal-glow-overlay opacity-30" />
+      <div className="absolute inset-0 thermal-glow-overlay opacity-50" />
       
-      {/* Gradient Overlay for text contrast - lighter at top */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/60" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/15 via-transparent to-black/15" />
+      {/* Gradient Overlay for text contrast */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/70" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30" />
 
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
@@ -78,51 +79,23 @@ const HeroSection = () => {
         >
           <motion.button
             onClick={() => scrollToAnalyzer('upload')}
-            className="btn-tesla-primary min-w-[220px] flex items-center justify-center gap-3 overflow-hidden relative"
-            whileHover={{ 
-              scale: 1.05, 
-              y: -3,
-              boxShadow: "0 20px 40px -15px rgba(0,0,0,0.5), 0 0 30px rgba(255,255,255,0.1)"
-            }}
-            whileTap={{ 
-              scale: 0.92,
-              y: 0,
-              transition: { duration: 0.1 }
-            }}
-            transition={{ type: "spring", stiffness: 500, damping: 15 }}
+            className="btn-tesla-primary min-w-[220px] flex items-center justify-center gap-3"
+            whileHover={{ scale: 1.02, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
           >
-            <motion.span
-              className="absolute inset-0 bg-white/20"
-              initial={{ x: "-100%", opacity: 0 }}
-              whileTap={{ x: "100%", opacity: 1 }}
-              transition={{ duration: 0.4 }}
-            />
-            <Upload className="w-5 h-5 relative z-10" />
-            <span className="relative z-10">Upload Image</span>
+            <Upload className="w-5 h-5" />
+            Upload Image
           </motion.button>
           <motion.button
             onClick={() => scrollToAnalyzer('dashboard')}
-            className="btn-tesla-secondary min-w-[220px] flex items-center justify-center gap-3 overflow-hidden relative"
-            whileHover={{ 
-              scale: 1.05, 
-              y: -3,
-              boxShadow: "0 20px 40px -15px rgba(0,0,0,0.5), 0 0 30px rgba(255,255,255,0.15)"
-            }}
-            whileTap={{ 
-              scale: 0.92,
-              y: 0,
-              transition: { duration: 0.1 }
-            }}
-            transition={{ type: "spring", stiffness: 500, damping: 15 }}
+            className="btn-tesla-secondary min-w-[220px] flex items-center justify-center gap-3"
+            whileHover={{ scale: 1.02, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
           >
-            <motion.span
-              className="absolute inset-0 bg-white/30"
-              initial={{ x: "-100%", opacity: 0 }}
-              whileTap={{ x: "100%", opacity: 1 }}
-              transition={{ duration: 0.4 }}
-            />
-            <Building2 className="w-5 h-5 relative z-10" />
-            <span className="relative z-10">City Dashboard</span>
+            <Building2 className="w-5 h-5" />
+            City Dashboard
           </motion.button>
         </motion.div>
       </div>
