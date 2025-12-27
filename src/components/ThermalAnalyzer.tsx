@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Upload, AlertTriangle, Thermometer, Droplets, Zap, X, Plus, Building2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import CityDashboard from './CityDashboard';
 
 interface AnalysisResult {
@@ -150,15 +151,32 @@ const ThermalAnalyzer = () => {
     }
   };
 
-  // Handle City Dashboard mode
-  if (mode === 'city-dashboard') {
-    return <CityDashboard onBack={() => setMode('selection')} />;
-  }
+  return (
+    <AnimatePresence mode="wait">
+      {/* Handle City Dashboard mode */}
+      {mode === 'city-dashboard' && (
+        <motion.div
+          key="city-dashboard"
+          initial={{ opacity: 0, x: 100 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -100 }}
+          transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+        >
+          <CityDashboard onBack={() => setMode('selection')} />
+        </motion.div>
+      )}
 
-  // Mode selection screen
-  if (mode === 'selection') {
-    return (
-      <section id="analyzer" className="min-h-screen flex items-center bg-background py-20">
+      {/* Mode selection screen */}
+      {mode === 'selection' && (
+        <motion.section
+          key="selection"
+          id="analyzer"
+          className="min-h-screen flex items-center bg-background py-20"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.95 }}
+          transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+        >
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12 w-full">
           <div className="text-center mb-12">
             <p className="text-sm uppercase tracking-widest text-muted-foreground mb-4">
@@ -202,12 +220,20 @@ const ThermalAnalyzer = () => {
             </button>
           </div>
         </div>
-      </section>
-    );
-  }
+      </motion.section>
+      )}
 
-  return (
-    <section id="analyzer" className="min-h-screen flex items-center bg-background py-20">
+      {/* Upload mode */}
+      {mode === 'upload' && (
+        <motion.section
+          key="upload"
+          id="analyzer"
+          className="min-h-screen flex items-center bg-background py-20"
+          initial={{ opacity: 0, x: 100 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -100 }}
+          transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+        >
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 w-full">
         <div className="text-center mb-12">
           <button
@@ -232,35 +258,47 @@ const ThermalAnalyzer = () => {
           </p>
         </div>
 
-        {/* Upload Area */}
-        {!uploadedImage && (
-          <div
-            onClick={() => fileInputRef.current?.click()}
-            className="max-w-2xl mx-auto border-2 border-dashed border-border rounded-sm p-12 text-center cursor-pointer hover:border-primary transition-colors"
-          >
-            <Upload className="w-16 h-16 text-muted-foreground mx-auto mb-6" />
-            <p className="text-lg text-foreground mb-2">
-              Drop your thermal image here
-            </p>
-            <p className="text-sm text-muted-foreground mb-6">
-              or click to browse files
-            </p>
-            <button className="btn-tesla-primary">
-              Select Image
-            </button>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleFileUpload}
-              className="hidden"
-            />
-          </div>
-        )}
+        <AnimatePresence mode="wait">
+          {/* Upload Area */}
+          {!uploadedImage && (
+            <motion.div
+              key="upload-area"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+              onClick={() => fileInputRef.current?.click()}
+              className="max-w-2xl mx-auto border-2 border-dashed border-border rounded-sm p-12 text-center cursor-pointer hover:border-primary transition-colors"
+            >
+              <Upload className="w-16 h-16 text-muted-foreground mx-auto mb-6" />
+              <p className="text-lg text-foreground mb-2">
+                Drop your thermal image here
+              </p>
+              <p className="text-sm text-muted-foreground mb-6">
+                or click to browse files
+              </p>
+              <button className="btn-tesla-primary">
+                Select Image
+              </button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleFileUpload}
+                className="hidden"
+              />
+            </motion.div>
+          )}
 
-        {/* Analysis View */}
-        {uploadedImage && (
-          <div className="animate-fade-in">
+          {/* Analysis View */}
+          {uploadedImage && (
+            <motion.div
+              key="analysis-view"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
             <div className="grid lg:grid-cols-3 gap-8">
               {/* Image with markers */}
               <div className="lg:col-span-2 relative">
@@ -452,10 +490,13 @@ const ThermalAnalyzer = () => {
                 )}
               </div>
             </div>
-          </div>
+          </motion.div>
         )}
+        </AnimatePresence>
       </div>
-    </section>
+    </motion.section>
+      )}
+    </AnimatePresence>
   );
 };
 

@@ -45,7 +45,7 @@ const FeatureSection = ({
 
       {/* Overlay */}
       {darkOverlay && (
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-transparent" />
       )}
 
       {/* Content */}
@@ -62,7 +62,7 @@ const FeatureSection = ({
         >
           {subtitle && (
             <motion.p 
-              className="text-sm uppercase tracking-widest text-muted-foreground mb-4"
+              className="text-sm uppercase tracking-widest text-white/70 mb-4"
               initial={{ opacity: 0, y: 40 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
               transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
@@ -71,7 +71,7 @@ const FeatureSection = ({
             </motion.p>
           )}
           <motion.h2 
-            className="text-4xl md:text-5xl font-medium text-foreground mb-6"
+            className="text-4xl md:text-5xl font-medium text-white mb-6 drop-shadow-lg"
             initial={{ opacity: 0, y: 40 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
@@ -79,7 +79,7 @@ const FeatureSection = ({
             {title}
           </motion.h2>
           <motion.p 
-            className="text-lg text-muted-foreground mb-8 leading-relaxed"
+            className="text-lg text-white/85 mb-8 leading-relaxed drop-shadow-md"
             initial={{ opacity: 0, y: 40 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
             transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
@@ -105,10 +105,10 @@ const FeatureSection = ({
                   animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
                   transition={{ duration: 0.6, delay: 0.5 + index * 0.1, ease: "easeOut" }}
                 >
-                  <div className="text-3xl md:text-4xl font-medium text-foreground mb-1">
+                  <div className="text-3xl md:text-4xl font-medium text-white mb-1 drop-shadow-lg">
                     {stat.value}
                   </div>
-                  <div className="text-sm text-muted-foreground uppercase tracking-wide">
+                  <div className="text-sm text-white/70 uppercase tracking-wide">
                     {stat.label}
                   </div>
                 </motion.div>

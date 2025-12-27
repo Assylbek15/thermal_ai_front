@@ -82,13 +82,13 @@ const BuildingDetails = ({ building, viewMode, onViewModeChange, toggles, onTogg
       </div>
 
       {/* View mode toggles */}
-      <div className="p-3 border-b border-foreground/10 flex items-center justify-between">
-        <div className="flex gap-1">
+      <div className="p-4 border-b border-foreground/10 flex flex-wrap items-center justify-between gap-4">
+        <div className="flex gap-2">
           {(['3d', 'thermal', 'hotspot'] as const).map((mode) => (
             <button
               key={mode}
               onClick={() => onViewModeChange(mode)}
-              className={`px-3 py-1.5 text-xs font-mono tracking-wider transition-all ${
+              className={`px-4 py-2 text-xs font-mono tracking-wider transition-all ${
                 viewMode === mode
                   ? 'bg-primary text-primary-foreground'
                   : 'text-muted-foreground hover:text-foreground'
@@ -98,12 +98,12 @@ const BuildingDetails = ({ building, viewMode, onViewModeChange, toggles, onTogg
             </button>
           ))}
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-2">
           {Object.entries(toggles).map(([key, value]) => (
             <button
               key={key}
               onClick={() => onToggleChange(key as keyof typeof toggles)}
-              className={`px-2 py-1 text-[10px] font-mono tracking-wider border transition-all ${
+              className={`px-3 py-2 text-[10px] font-mono tracking-wider border transition-all whitespace-nowrap ${
                 value
                   ? 'border-primary text-primary bg-primary/10'
                   : 'border-foreground/20 text-muted-foreground hover:border-foreground/40'
