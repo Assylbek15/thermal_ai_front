@@ -33,7 +33,7 @@ const buildingTypes = ['Residential', 'School', 'Hospital', 'Commercial', 'Indus
 const climateZones = ['Continental', 'Humid Subtropical', 'Mediterranean', 'Semi-arid'];
 
 const CityCard = ({ city, index, onSelect }: { city: typeof cities[0]; index: number; onSelect: (id: string) => void }) => {
-  const { count } = useCountUp({ end: city.buildingCount, duration: 1500, delay: index * 100 });
+  const { count } = useCountUp({ end: city.buildingCount, duration: 2000, delay: index * 100 });
   
   return (
     <motion.button

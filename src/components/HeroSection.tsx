@@ -27,20 +27,17 @@ const HeroSection = () => {
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover scale-105"
+          className="absolute inset-0 w-full h-full object-cover scale-105 lg:scale-110 xl:scale-125 2xl:scale-150"
         >
           <source src="/videos/thermal-hero.mp4" type="video/mp4" />
         </video>
       </motion.div>
       
-      {/* Dark overlay for contrast */}
-      <div className="absolute inset-0 bg-black/50" />
-      
       {/* Thermal glow overlay */}
       <div className="absolute inset-0 thermal-glow-overlay opacity-50" />
       
-      {/* Gradient Overlay for text contrast */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/70" />
+      {/* Gradient Overlay - darker at bottom, brighter at top */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/80" />
       <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30" />
 
       {/* Content */}
